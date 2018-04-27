@@ -80,6 +80,7 @@ function createWidget(name, left, top, contentText, cssText, callback) {
 
 var iconX = 30;
 var iconY = 30;
+// TODO: next column if full
 var initializedWidgets = {};
 function initializeWidget(name, content, css, callback) {
     initializedWidgets[name] = {open: false};
