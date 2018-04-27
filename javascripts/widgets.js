@@ -1,35 +1,53 @@
-function createWidget(left, top, contentText) {
+function createWidget(name, left, top, contentText, cssText) {
     var container = document.getElementById("container");
 
+    // Create outer frame for widget
     var frame = document.createElement("div");
     frame.className = "widget";
     frame.style.left = left + "px";
     frame.style.top = top + "px";
+    container.appendChild(frame);
 
+    // Create cover over widget to avoid clicking and to ensure dragging
     var cover = document.createElement("div");
     cover.className = "widgetCover";
 
+    // Create menu bar and minimize button
     var menuBar = document.createElement("div");
     menuBar.className = "menuBar";
     var minimize = document.createElement("p");
     minimize.className = "minimizeButton";
     minimize.innerHTML = "-";
+    menuBar.appendChild(minimize);
+    frame.appendChild(menuBar);
 
+    // Create widget content
     var content = document.createElement("div");
     content.innerHTML = contentText;
     content = content.childNodes[0];
-
-    // TODO: may not work on some browsers
-    cover.style.width = content.style.width;
-    cover.style.height = content.style.height;
-    console.log(content.style.width);
-
-    menuBar.appendChild(minimize);
-    frame.appendChild(cover);
-    frame.appendChild(menuBar);
     frame.appendChild(content);
-    container.appendChild(frame);
 
+    // Set css if any
+    if (cssText) {
+        var css = document.createElement("div");
+        css.innerHTML = cssText;
+        css = css.childNodes[0]
+        document.getElementsByTagName('head')[0].appendChild(css);
+        css.addEventListener("load", function() {
+            cover.style.width = content.style.width || content.offsetWidth + "px";
+            cover.style.height = content.style.height || content.offsetHeight + "px";
+            frame.appendChild(cover);
+        });
+    }
+    // Set dover width and height if no css
+    else {
+        cover.style.width = content.style.width || content.offsetWidth + "px";
+        cover.style.height = content.style.height || content.offsetHeight + "px";
+        frame.appendChild(cover);  
+    }
+ 
+
+    // Make menu bar appear and disappear
     frame.addEventListener("mouseover", function() {
         menuBar.style.height = "25px";
         minimize.style.display = "inline";
@@ -38,6 +56,8 @@ function createWidget(left, top, contentText) {
         menuBar.style.height = "0";
         minimize.style.display = "none";
     });
+
+    // Make minimize button highlight and clickable
     minimize.addEventListener("mouseover", function() {
         minimize.style.color = "#FFFFFF";
         minimize.style.backgroundColor = "#A1A1A1";
@@ -48,5 +68,21 @@ function createWidget(left, top, contentText) {
     });
     minimize.addEventListener("click", function() {
         frame.parentElement.removeChild(frame);
+        initializedWidgets[name].open = false;
     });
+}
+
+var iconX = 30;
+var iconY = 30;
+var initializedWidgets = {};
+function initializeWidget(name, content, css) {
+    initializedWidgets[name] = {open: false};
+    createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", function () {
+        if (initializedWidgets[name].open == false) {
+            createWidget(name, iconX + 100, iconY, content, css);
+            initializedWidgets[name].open = true;
+        }
+        
+    });
+    iconY += 60;
 }
