@@ -1,4 +1,4 @@
-function createWidget(name, left, top, contentText, cssText) {
+function createWidget(name, left, top, contentText, cssText, callback) {
     var container = document.getElementById("container");
 
     // Create outer frame for widget
@@ -27,6 +27,7 @@ function createWidget(name, left, top, contentText, cssText) {
     content = content.childNodes[0];
     frame.appendChild(content);
 
+    // TODO: fix so that width and height no longer need to be set
     // Set css if any
     if (cssText) {
         var css = document.createElement("div");
@@ -39,7 +40,7 @@ function createWidget(name, left, top, contentText, cssText) {
             frame.appendChild(cover);
         });
     }
-    // Set dover width and height if no css
+    // Set cover width and height if no css
     else {
         cover.style.width = content.style.width || content.offsetWidth + "px";
         cover.style.height = content.style.height || content.offsetHeight + "px";
@@ -70,16 +71,21 @@ function createWidget(name, left, top, contentText, cssText) {
         frame.parentElement.removeChild(frame);
         initializedWidgets[name].open = false;
     });
+
+    // Call the widget's functions
+    if (callback) {
+        callback();
+    }
 }
 
 var iconX = 30;
 var iconY = 30;
 var initializedWidgets = {};
-function initializeWidget(name, content, css) {
+function initializeWidget(name, content, css, callback) {
     initializedWidgets[name] = {open: false};
     createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", function () {
         if (initializedWidgets[name].open == false) {
-            createWidget(name, iconX + 100, iconY, content, css);
+            createWidget(name, iconX + 100, iconY, content, css, callback);
             initializedWidgets[name].open = true;
         }
         

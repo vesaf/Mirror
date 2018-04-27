@@ -1,0 +1,9 @@
+/* TODO: some css */
+.clockWidget {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55px;
+    height: 35px;
+    color: #FFFFFF;
+}
