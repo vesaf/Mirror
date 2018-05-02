@@ -7,3 +7,8 @@ buy microphone for google assistant
 clock widget:
 http://jsfiddle.net/andsens/mLA7X/
 https://stackoverflow.com/questions/14222138/css-progress-circle?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+spotify widget:
+https://beta.developer.spotify.com/documentation/widgets/guides/adding-a-spotify-play-button/
+https://beta.developer.spotify.com/documentation/web-playback-sdk/
+http://routenote.com/blog/how-to-embed-and-customise-spotify-in-websites-and-blogs/
+https://stackoverflow.com/questions/217776/how-to-apply-css-to-iframe
