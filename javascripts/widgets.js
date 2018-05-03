@@ -25,7 +25,24 @@ function createWidget(name, left, top, contentText, cssText, callback) {
     var content = document.createElement("div");
     content.innerHTML = contentText;
     content = content.childNodes[0];
+    
+    // Call callback once content loaded
+    if (callback) {
+        // TODO: fix this dirty fix for observer firing twice
+        // TODO: is cover always last to load?
+        var first = true;
+        var observer = new MutationObserver(function(mutations) {
+            if (document.contains(cover) && first) {
+                callback();
+                first = false;
+                observer.disconnect;
+            }
+        });
+        observer.observe(container, {attributes: false, childList: true, characterData: false, subtree: true});
+    }
+
     frame.appendChild(content);
+
 
     // TODO: fix so that width and height no longer need to be set
     // Set css if any
@@ -71,11 +88,6 @@ function createWidget(name, left, top, contentText, cssText, callback) {
         frame.parentElement.removeChild(frame);
         initializedWidgets[name].open = false;
     });
-
-    // Call the widget's functions
-    if (callback) {
-        callback();
-    }
 }
 
 var iconX = 30;
