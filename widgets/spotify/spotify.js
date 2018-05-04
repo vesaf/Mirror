@@ -10,12 +10,12 @@ function startSpotify() {
     player.connect();
 
     // TODO: fix this dirty fix for observer firing twice
-    var first = true;
+    // var first = true;
     var spotifyWidget = document.getElementById("spotifyWidget");
     var container = document.getElementById("container");
     var observer = new MutationObserver(function(mutations) {
-        if (!document.contains(spotifyWidget) && first) {
-            first = false;
+        if (!document.contains(spotifyWidget)) {
+            // first = false;
             player.disconnect();
             observer.disconnect;
         }
@@ -25,7 +25,8 @@ function startSpotify() {
 
 function setupSpotify() {
     window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = 'BQCymr6EX0n3TYqv0ZdAbsCsVhIC-TwUJ4xShTI0LzQi3RuNXP650mO5qIgokzpPGaOL2xkjt3LX3ht0vlPYesT9ZcBIND-jB_qI8CU-QSXGBYpFObOqvQQ4Q0rA6S97CmH6HVn5MlrO979Y5UgR2P0ncuZrM2ZW-A';
+        // Get token from: https://beta.developer.spotify.com/documentation/web-playback-sdk/quick-start/#
+        const token = 'BQC0jn0Zh6_w9HwnKY9FgPtVLXy2tXDSc-N0-PXpIakP0uwbcgDo58XpqfKSWWxzEjoL9Xes4mLmbW895ZFzlX-PyEJ_OBO7yOrcGXeidvg1W7Jkau5Trv32-VVguNVhl698FBmECt0sa5jagUA8K803diBstG9-ow';
         player = new Spotify.Player({
           name: 'MirrorOS',
           getOAuthToken: cb => { cb(token); }
