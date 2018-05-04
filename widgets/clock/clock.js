@@ -1,3 +1,4 @@
+var clockInterval
 window.addEventListener("load", function() {
     var css = '<link rel="stylesheet" type="text/css" href="widgets/clock/style.css">';
     var html = `<div class="pie">
@@ -19,11 +20,15 @@ window.addEventListener("load", function() {
 function startClock() {
     document.getElementsByClassName("widgetCover")[document.getElementsByClassName("widgetCover").length-1].style.position = "absolute";
     setIntervalAndExecute(function() {
+        if (!document.getElementById("clockWidget")) {
+            clearInterval(clockInterval);
+            return;
+        }
+        console.log("tick");
         let currentdate = new Date();
         let min = currentdate.getMinutes();
         let hrs = currentdate.getHours();
         let sec = currentdate.getSeconds();
-        console.log(hrs);
         if (hrs > 12 || (hrs == 12 && min > 0)) {
             progressBarUpdate(hrs - 12 + min / 60, 12);
         }
@@ -56,7 +61,6 @@ function startClock() {
             default:
                 day = "Zaterdag";
         }
-
         document.getElementById("statusTime").innerHTML = "<span id='statusDay'>" + day + "</span><br>" 
                                                         + ("0" + hrs).slice(-2) + ":" + ("0" + min).slice(-2) + "<span id='statusSeconds'> " + ("0" + sec).slice(-2) + "</span><br>"
                                                         + "<span id='statusDate'>" + ("0" + currentdate.getDate()).slice(-2) + "/" 
@@ -92,5 +96,5 @@ function progressBarUpdate(x, outOf) {
 // Helper function
 function setIntervalAndExecute(fn, t) {
     fn();
-    window.setInterval(fn, t);
+    clockInterval = window.setInterval(fn, t);
 }
