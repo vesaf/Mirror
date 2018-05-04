@@ -4,7 +4,6 @@ function createWidget(name, left, top, contentText, cssText, callback) {
     // Create outer frame for widget
     var frame = document.createElement("div");
     frame.className = "widget";
-    frame.id = name + "Widget";
     frame.style.left = left + "px";
     frame.style.top = top + "px";
     container.appendChild(frame);
