@@ -3,10 +3,8 @@ function createIcon(left, top, imageSrc, openWidget) {
 
     var icon = document.createElement("div");
     icon.className = "icon";
-    icon.style.position = "absolute";
     icon.style.left = left + "px";
     icon.style.top = top + "px";
-    icon.style.zIndex = "0";
 
     var iconImg = document.createElement("img");
     iconImg.src = imageSrc;

@@ -92,17 +92,21 @@ function createWidget(name, left, top, contentText, cssText, callback) {
 }
 
 var iconX = 30;
-var iconY = 30;
+var iconY = 90;
 // TODO: next column if full
 var initializedWidgets = {};
 function initializeWidget(name, content, css, callback) {
     initializedWidgets[name] = {open: false};
     createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", function () {
         if (initializedWidgets[name].open == false) {
-            createWidget(name, iconX + 100, iconY, content, css, callback);
+            createWidget(name, iconX, iconY, content, css, callback);
             initializedWidgets[name].open = true;
         }
         
     });
     iconY += 60;
+}
+
+function getNextIconXY() {
+    return {x: iconX, y: iconY - 60};
 }

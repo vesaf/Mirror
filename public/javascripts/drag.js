@@ -2,10 +2,18 @@
 window.addEventListener("load", function() {
     var holdDown = null;
     var lastCoords = {x: undefined, y: undefined}
+    var activeItem;
     // On click, check if on widget, if so, set holdDown to widget container
     window.addEventListener('mousedown', function(e) {
         parentElementClassesContain(e.target, ["widget", "icon"], function(widget) {
             if (widget) {
+                // Make sure that the last item that was dragged is on top
+                if (activeItem) {
+                    activeItem.classList.remove("activeWidget");
+                }
+                activeItem = widget;
+                activeItem.classList.add("activeWidget");
+                
                 holdDown = widget;
                 // Set last coordinates to first click location
                 lastCoords.x = e.x;

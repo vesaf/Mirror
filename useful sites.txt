@@ -12,3 +12,4 @@ https://beta.developer.spotify.com/documentation/widgets/guides/adding-a-spotify
 https://beta.developer.spotify.com/documentation/web-playback-sdk/
 http://routenote.com/blog/how-to-embed-and-customise-spotify-in-websites-and-blogs/
 https://stackoverflow.com/questions/217776/how-to-apply-css-to-iframe
+https://beta.developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
