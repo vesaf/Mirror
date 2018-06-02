@@ -1,0 +1,95 @@
+/* TODO: some css */
+.clockWidget {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55px;
+    height: 35px;
+    color: #FFFFFF;
+    background-color: #000000;
+}
+
+* {
+    margin:0;
+    padding:0;
+}
+.pie {
+    background-color:#000000;
+    width:200px;
+    height:200px;
+    -moz-border-radius:100px;
+    -webkit-border-radius:100px;
+    border-radius:100px;
+}
+.clip1 {
+    position:absolute;
+    top:0;
+    left:0;
+    width:200px;
+    height:200px;
+    clip:rect(0px, 200px, 200px, 100px);
+}
+.slice1 {
+    position:absolute;
+    width:200px;
+    height:200px;
+    clip:rect(0px, 100px, 200px, 0px);
+    -moz-border-radius:100px;
+    -webkit-border-radius:100px;
+    border-radius:100px;
+    background-color:#FFFFFF;
+    border-color:#FFFFFF;
+    -moz-transform:rotate(0);
+    -webkit-transform:rotate(0);
+    -o-transform:rotate(0);
+    transform:rotate(0);
+}
+.clip2 {
+    position:absolute;
+    top:0;
+    left:0;
+    width:200px;
+    height:200px;
+    clip:rect(0, 100px, 200px, 0px);
+}
+.slice2 {
+    position:absolute;
+    width:200px;
+    height:200px;
+    clip:rect(0px, 200px, 200px, 100px);
+    -moz-border-radius:100px;
+    -webkit-border-radius:100px;
+    border-radius:100px;
+    background-color:#FFFFFF;
+    border-color:#FFFFFF;
+    -moz-transform:rotate(0);
+    -webkit-transform:rotate(0);
+    -o-transform:rotate(0);
+    transform:rotate(0);
+}
+.status {
+    position: relative;
+    top: 45px;
+    left: 10px;
+    height:180px;
+    width:180px;
+    font-family: 'Space Mono';
+    border-radius: 90px;
+    background-color: #000000;
+    color: #FFFFFF;
+    margin-top:-35px;
+    font-size:30px;
+}
+
+#statusTime {
+    font-size: 32px;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    top: 17px;
+    width: 180px
+}
+
+#statusSeconds, #statusDay, #statusDate {
+    font-size: 20px;
+}
