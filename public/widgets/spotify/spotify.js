@@ -4,6 +4,11 @@ window.addEventListener("load", function() {
     var html = `<div></div>`;
     initializeWidget("spotify", html, css, startSpotify);
     setupSpotify();
+    // console.log(getParameterByName('code'));
+    // jQuery.ajax({
+    //     type: "POST",
+
+    // })
 });
 function startSpotify() {
     // Connect to the player!
@@ -51,4 +56,14 @@ function setupSpotify() {
           console.log('Device ID has gone offline', device_id);
         });
     };
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
