@@ -7,13 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('node:server');
 var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '80');
-app.set('port', port);
+var nodeCmd = require('node-cmd');
 
 /**
  * Create HTTP server.
@@ -24,30 +18,17 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+getIPv4(function (IPv4) {
+  console.log("Port:", IPv4 + ":8080");
+  server.listen(8080, IPv4);
+  server.on('error', onError);
+  server.on('listening', onListening);
+});
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
+// console.log("Port:", "localhost");
+// server.listen(80, "localhost");
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -87,4 +68,20 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+/**
+ * Extract IPv4 address from cmd command ipconfig.
+ */
+function getIPv4(callback) {
+  nodeCmd.get('ipconfig', function (err, data, stderr) {
+    if (data.indexOf("IPv4 Address. . . . . . . . . . . : ") < 0 || err) {
+      var IPv4 = "localhost";
+    }
+    else {
+      var secondPart = data.substr(data.indexOf("IPv4 Address. . . . . . . . . . . : ") + 36, data.length);
+      var IPv4 = secondPart.substr(0, secondPart.indexOf(" ") - 2)
+    }
+    callback(IPv4);
+  });
 }
