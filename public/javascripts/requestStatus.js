@@ -40,10 +40,14 @@ window.addEventListener("beforeunload", function () {
 function functionCalls(id, options) {
     switch (id) {
         case 1:
-            if (options.widget) {
+            if (options.widget && document.getElementById(options.widget)) {
                 document.getElementById(options.widget).click();
             }
             break;
+        case 2:
+            if (options.widget && document.getElementById(options.widget + "Minimize")) {
+                document.getElementById(options.widget + "Minimize").click();
+            }
         default:
             console.error("The server wants to tell you something but it doesn't know how to.")
     }

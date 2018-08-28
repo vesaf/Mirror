@@ -17,6 +17,7 @@ function createWidget(name, left, top, contentText, cssText, callback) {
     menuBar.className = "menuBar";
     var minimize = document.createElement("p");
     minimize.className = "minimizeButton";
+    minimize.id = name + "Minimize";
     minimize.innerHTML = "-";
     menuBar.appendChild(minimize);
     frame.appendChild(menuBar);
