@@ -1,8 +1,9 @@
-function createIcon(left, top, imageSrc, openWidget) {
+function createIcon(left, top, imageSrc, name, openWidget) {
     var container = document.getElementById("container");
 
     var icon = document.createElement("div");
     icon.className = "icon";
+    icon.id = name;
     icon.style.left = left + "px";
     icon.style.top = top + "px";
 

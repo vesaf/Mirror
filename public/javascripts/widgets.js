@@ -96,7 +96,7 @@ var iconY = 90;
 var initializedWidgets = {};
 function initializeWidget(name, content, css, callback) {
     initializedWidgets[name] = {open: false};
-    createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", function () {
+    createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", name, function () {
         if (initializedWidgets[name].open == false) {
             createWidget(name, iconX, iconY, content, css, callback);
             initializedWidgets[name].open = true;

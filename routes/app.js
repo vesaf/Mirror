@@ -31,6 +31,29 @@ router.get("/screendims", function (req, res) {
   }
 });
 
+
+var status = { id: 0 };
+
+// Send current status
+router.get('/status', function (req, res) {
+  res = setHeaders(res);
+  res.setHeader('Content-Type', 'application/json');
+  res.status(200).send(status);
+  status = { id: 0 };
+});
+
+// Set current status
+router.post('/status', function (req, res) {
+  var data = JSON.parse(Object.keys(req.body)[0]);
+  if (data) {
+    console.log(data);
+    status = data;
+  }
+  res = setHeaders(res);
+  // console.log(res);
+  res.end();
+});
+
 function setHeaders(res) {
   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
