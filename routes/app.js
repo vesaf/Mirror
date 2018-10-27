@@ -15,6 +15,17 @@ router.get('/widgetnames', function (req, res) {
   });
 });
 
+var widgetLocation;
+router.post('/widgetLocation', function (req, res) {
+  widgetLocation = req.body;
+  res.end();
+});
+
+router.get('/widgetlocation', function (req, res) {
+  res = setHeaders(res);
+  res.send(widgetLocation).end();
+});
+
 var dims;
 router.post('/screendims', function (req, res) {
   dims = req.body;
@@ -22,6 +33,7 @@ router.post('/screendims', function (req, res) {
 });
 
 router.get("/screendims", function (req, res) {
+  console.log(dims);
   res = setHeaders(res);
   if (dims) {
     res.send(dims).end();
@@ -43,11 +55,18 @@ router.get('/status', function (req, res) {
 });
 
 // Set current status
+var lastWidget;
 router.post('/status', function (req, res) {
   var data = JSON.parse(Object.keys(req.body)[0]);
   if (data) {
     console.log(data);
     status = data;
+    if (status.id === 1) {
+      lastWidget = status.options.widget;
+    }
+    else if (status.id === 2) {
+      lastWidget = undefined;
+    }
   }
   res = setHeaders(res);
   // console.log(res);

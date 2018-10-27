@@ -13,20 +13,9 @@ var statusInterval = setInterval(function () {
                 console.log(data);
                 functionCalls(data.id, data.options);
             }
-            connectionLostNotificationSent = false;
         },
         error: function (jqXHR, status) {
-            // If error and no connection lost notification has been sent yet, send notification
-            if (!connectionLostNotificationSent) {
-                functionCalls(1, {
-                    className: "caution",
-                    title: "Pas op!",
-                    description: "Je hebt nu geen verbinding met het internet of de intafi server. Wijzigingen die je nu maakt worden niet opgeslagen.",
-                    element: undefined,
-                    save: false
-                });
-                connectionLostNotificationSent = true;
-            }
+            // TODO
         }
     });
 }, intervalTime);
@@ -42,10 +31,12 @@ function functionCalls(id, options) {
         case 1:
             if (options.widget && document.getElementById(options.widget)) {
                 document.getElementById(options.widget).click();
+                setLastAppWidget(options.widget);
             }
             break;
         case 2:
             if (options.widget && document.getElementById(options.widget + "Minimize")) {
+                // resetLastAppWidget(options.widget);
                 document.getElementById(options.widget + "Minimize").click();
             }
         default:

@@ -23,7 +23,6 @@ function startClock() {
         let min = currentdate.getMinutes();
         let hrs = currentdate.getHours();
         let sec = currentdate.getSeconds();
-        console.log(hrs);
         if (hrs > 12 || (hrs == 12 && min > 0)) {
             progressBarUpdate(hrs - 12 + min / 60, 12);
         }
