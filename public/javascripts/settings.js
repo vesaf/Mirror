@@ -21,6 +21,9 @@ function openSettings() {
         var opaque = document.createElement("div");
         opaque.id = "opaqueLayer";
         var container = document.getElementById("container");
+        var sideMenu = document.createElement("div");
+        sideMenu.id = "settingsSideMenu";
+        opaque.appendChild(sideMenu);
         container.appendChild(opaque);
     }
 }
