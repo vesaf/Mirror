@@ -26,14 +26,35 @@ function openSettings() {
         // Create side menu container
         var sideMenu = document.createElement("div");
         sideMenu.id = "settingsSideMenu";
+        // Create settings content container
+        var settingsContent = document.createElement("div");
+        settingsContent.id = "settingsContent";
         // Create close button
         var closeBtn = document.createElement("div");
         closeBtn.id = "closeBtn"
         closeBtn.addEventListener("click", closeSettings)
         // Add to page
         opaque.appendChild(sideMenu);
+        opaque.appendChild(settingsContent);
         opaque.appendChild(closeBtn);
         container.appendChild(opaque);
+        sideMenu.innerHTML += `
+        <div class="settingsMenuItem active">
+            <span class="settingsMenuItemText active">App Verbinding</span>
+        </div>
+        <div class="settingsMenuItem">
+            <span class="settingsMenuItemText">Overig</span>
+        </div>
+        `;
+        settingsContent.innerHTML += `
+        <div id="placeHolder"></div>
+        `;
+        var typeNumber = 3;
+        var errorCorrectionLevel = 'L';
+        var qr = qrcode(typeNumber, errorCorrectionLevel);
+        qr.addData("192.168.1.144:8080");
+        qr.make();
+        document.getElementById("placeHolder").innerHTML = qr.createImgTag();
     }
 }
 
