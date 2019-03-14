@@ -71,7 +71,6 @@
     width: 80%;
     height: 100%;
     float: right;
-    background-color: green;
 }
 
 #closeBtn {
@@ -110,4 +109,11 @@
 
 #closeBtn:hover {
     cursor: pointer;
+}
+
+#placeHolder svg {
+    width: 400px;
+    height: 400px;
+    display: block;
+    margin: 30px auto;
 }

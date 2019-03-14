@@ -52,9 +52,10 @@ function openSettings() {
         var typeNumber = 3;
         var errorCorrectionLevel = 'L';
         var qr = qrcode(typeNumber, errorCorrectionLevel);
-        qr.addData("192.168.1.144:8080");
+        qr.addData("http://" + window.location.host);
         qr.make();
-        document.getElementById("placeHolder").innerHTML = qr.createImgTag();
+        document.getElementById("placeHolder").innerHTML = qr.createSvgTag();
+        console.log(window.location);
     }
 }
 

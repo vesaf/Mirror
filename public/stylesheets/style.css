@@ -81,8 +81,3 @@ html, body {
     width: 10px;
     min-height: 100%;
 }
-
-#placeHolder img {
-    width: 400px;
-    height: 400px;
-}
