@@ -8,23 +8,21 @@ var app = require('../app');
 var debug = require('debug')('node:server');
 var http = require('http');
 var nodeCmd = require('node-cmd');
+var ip = require("ip");
 
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-// TODO: remove all IPv4 code
-getIPv4(function (IPv4) {
-  console.log("Port:", IPv4 + ":8080");
-  server.listen(8080, "0.0.0.0");
-  server.on('error', onError);
-  server.on('listening', onListening);
-});
+console.log("Port:", ip.address() + ":8080");
+server.listen(8080, ip.address());
+server.on('error', onError);
+server.on('listening', onListening);
+
 
 // console.log("Port:", "localhost");
 // server.listen(80, "localhost");
@@ -69,20 +67,4 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-}
-
-/**
- * Extract IPv4 address from cmd command ipconfig.
- */
-function getIPv4(callback) {
-  nodeCmd.get('ipconfig', function (err, data, stderr) {
-    if (data.indexOf("IPv4 Address. . . . . . . . . . . : ") < 0 || err) {
-      var IPv4 = "localhost";
-    }
-    else {
-      var secondPart = data.substr(data.indexOf("IPv4 Address. . . . . . . . . . . : ") + 36, data.length);
-      var IPv4 = secondPart.substr(0, secondPart.indexOf(" ") - 2)
-    }
-    callback(IPv4);
-  });
 }
