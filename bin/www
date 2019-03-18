@@ -7,8 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('node:server');
 var http = require('http');
-var nodeCmd = require('node-cmd');
-var ip = require("ip");
+var ip = require('ip');
+var exec = require('child_process').exec;
 
 /**
  * Create HTTP server.
@@ -18,16 +18,11 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-console.log("Port:", ip.address() + ":8080");
-server.listen(8080, ip.address());
+var IPv4 = ip.address();
+console.log("Port:", IPv4 + ":8080");
+server.listen(8080, IPv4);
 server.on('error', onError);
 server.on('listening', onListening);
-
-
-// console.log("Port:", "localhost");
-// server.listen(80, "localhost");
-// server.on('error', onError);
-// server.on('listening', onListening);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -67,4 +62,10 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  
+  // Open browser when on linux
+  if (process.platform === "linux") {
+    function puts(error, stdout, stderr) { console.log(stdout) }
+    exec("chromium-browser --kiosk http://" + IPv4 + ":8080", puts);
+  }
 }
