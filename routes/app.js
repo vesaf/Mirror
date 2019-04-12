@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
+var request = require("request");
 
 router.get('/ping', function (req, res) {
   res = setHeaders(res);
@@ -71,6 +72,59 @@ router.post('/status', function (req, res) {
   res = setHeaders(res);
   // console.log(res);
   res.end();
+});
+
+// router.get("/screendims", function (req, res) {
+//   console.log(dims);
+//   res = setHeaders(res);
+//   if (dims) {
+//     res.send(dims).end();
+//   }
+//   else {
+//     res.sendStatus(400);
+//   }
+// });
+
+router.get('/nba', function (req, res) {
+  request("http://data.nba.com/prod/v1/2018/schedule.json", function(error, response, body) {
+    const schedule = JSON.parse(body)["league"];
+    var today = new Date("01/01/2019");
+    today.setHours(0, 0, 0, 0);
+    var yesterday = new Date("01/01/2019");
+    yesterday.setHours(0, 0, 0, 0);
+    yesterday.setDate(yesterday.getDate() - 1);
+    var tomorrow = new Date("01/01/2019");
+    tomorrow.setHours(0, 0, 0, 0);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var overmorrow = new Date("01/01/2019");
+    overmorrow.setHours(0, 0, 0, 0);
+    overmorrow.setDate(overmorrow.getDate() + 2);
+    console.log(today);
+    console.log(yesterday);
+    console.log(tomorrow);
+    console.log(overmorrow);
+
+    var relevantSchedule = {
+      yesterday: [],
+      today: [],
+      tomorrow: []
+    };
+    for (let i = 0; i < schedule["standard"].length; i++) {
+      const game = schedule["standard"][i];
+      let gameTime = Date.parse(game["startTimeUTC"]);
+      if (gameTime >= yesterday && gameTime < today){
+        relevantSchedule["yesterday"].push(game);
+      }
+      else if (gameTime >= today && gameTime < tomorrow) {
+        relevantSchedule["today"].push(game);
+      }
+      else if (gameTime >= tomorrow && gameTime < overmorrow) {
+        relevantSchedule["tomorrow"].push(game);
+      }
+    }
+    res.write(JSON.stringify(relevantSchedule));
+    res.end();
+  });
 });
 
 function setHeaders(res) {
