@@ -1,12 +1,44 @@
 #NBAContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 250px;
     height: 400px;
     border: 5px solid white;
 }
 
-#dayHeader {
+h1 {
     color: white;
     text-align: center;
     line-height: 31px;
     margin: 5px;
 }
+
+h2{
+    color: white;
+    text-align: center;
+    margin: 0;
+}
+
+#contentContainer {
+    height: 340px;
+    overflow-y: auto;
+    background-color: black;
+}
+
+#contentContainer::-webkit-scrollbar{
+    display: none;
+}
+
+#pageIndicatorContainer {
+    height: 19px;
+    border-top: 2px solid white;
+}
+
+.gameContainer {
+    height: 85px;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    /* background-color: blue; */
+}
+

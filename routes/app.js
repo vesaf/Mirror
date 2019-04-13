@@ -88,21 +88,18 @@ router.post('/status', function (req, res) {
 router.get('/nba', function (req, res) {
   request("http://data.nba.com/prod/v1/2018/schedule.json", function(error, response, body) {
     const schedule = JSON.parse(body)["league"];
-    var today = new Date("01/01/2019");
+    var today = new Date();
     today.setHours(0, 0, 0, 0);
-    var yesterday = new Date("01/01/2019");
+    var yesterday = new Date();
     yesterday.setHours(0, 0, 0, 0);
     yesterday.setDate(yesterday.getDate() - 1);
-    var tomorrow = new Date("01/01/2019");
+    var tomorrow = new Date();
     tomorrow.setHours(0, 0, 0, 0);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    var overmorrow = new Date("01/01/2019");
+    var overmorrow = new Date();
     overmorrow.setHours(0, 0, 0, 0);
     overmorrow.setDate(overmorrow.getDate() + 2);
     console.log(today);
-    console.log(yesterday);
-    console.log(tomorrow);
-    console.log(overmorrow);
 
     var relevantSchedule = {
       yesterday: [],
