@@ -86,39 +86,59 @@ router.post('/status', function (req, res) {
 // });
 
 router.get('/nba', function (req, res) {
-  request("http://data.nba.com/prod/v1/2018/schedule.json", function(error, response, body) {
-    const schedule = JSON.parse(body)["league"];
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    var yesterday = new Date();
-    yesterday.setHours(0, 0, 0, 0);
-    yesterday.setDate(yesterday.getDate() - 1);
-    var tomorrow = new Date();
-    tomorrow.setHours(0, 0, 0, 0);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var overmorrow = new Date();
-    overmorrow.setHours(0, 0, 0, 0);
-    overmorrow.setDate(overmorrow.getDate() + 2);
-    console.log(today);
-
+  // Set day (generally just today but can be set for testing purposes)
+  var today = new Date();
+  
+  // Get season data, new season assumed to start in July
+  const season = (today.getMonth() >= 6) ? today.getFullYear() : today.getFullYear() - 1;
+  request("http://data.nba.com/prod/v1/" + season + "/schedule.json", function(error, response, body) {
+    // Setup relevant schedule object
     var relevantSchedule = {
       yesterday: [],
       today: [],
       tomorrow: []
     };
-    for (let i = 0; i < schedule["standard"].length; i++) {
-      const game = schedule["standard"][i];
-      let gameTime = Date.parse(game["startTimeUTC"]);
-      if (gameTime >= yesterday && gameTime < today){
-        relevantSchedule["yesterday"].push(game);
-      }
-      else if (gameTime >= today && gameTime < tomorrow) {
-        relevantSchedule["today"].push(game);
-      }
-      else if (gameTime >= tomorrow && gameTime < overmorrow) {
-        relevantSchedule["tomorrow"].push(game);
+
+    // if there are data (i.e. the requested page exists/there is an internet connection)
+    if (!error) {
+      // Parse data
+      const schedule = JSON.parse(body)["league"];
+      // Define dates of yesterday, tomorrow and overmorrow
+      const dateString = today.toDateString();
+      today.setHours(0, 0, 0, 0);
+      var yesterday = new Date(dateString);
+      yesterday.setHours(0, 0, 0, 0);
+      yesterday.setDate(yesterday.getDate() - 1);
+      var tomorrow = new Date(dateString);
+      tomorrow.setHours(0, 0, 0, 0);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      var overmorrow = new Date(dateString);
+      overmorrow.setHours(0, 0, 0, 0);
+      overmorrow.setDate(overmorrow.getDate() + 2);
+
+      // Get all NBA games in relevant date ranges
+      for (let i = 0; i < Object.keys(schedule).length; i++) {
+        const category = Object.keys(schedule)[i];
+        for (let j = 0; j < schedule[category].length; j++) {
+          const game = schedule[category][j];
+          let gameTime = Date.parse(game["startTimeUTC"]);
+          if (gameTime >= yesterday && gameTime < today){
+            relevantSchedule["yesterday"].push(game);
+          }
+          else if (gameTime >= today && gameTime < tomorrow) {
+            relevantSchedule["today"].push(game);
+          }
+          else if (gameTime >= tomorrow && gameTime < overmorrow) {
+            relevantSchedule["tomorrow"].push(game);
+          }
+        }
       }
     }
+    else {
+      console.error(error);
+    }
+
+    // Send data
     res.write(JSON.stringify(relevantSchedule));
     res.end();
   });

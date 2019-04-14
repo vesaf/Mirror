@@ -9,13 +9,20 @@ window.addEventListener("load", function() {
     initializeWidget("NBA", html, css, initializeNBA);
 });
 
+// Declare timer globally such that each function may cancel it
+var preSlideDelayTimer;
+
+// Get NBA data
 function initializeNBA() {
-    document.getElementById("dayHeader").innerHTML = "Tomorrow";
+    // Cancel any pre-existing slide timers
+    clearTimeout(preSlideDelayTimer);
+    
     jQuery.ajax({
         url: "/app/nba",
         success: function (data, status, jqXHR) {
             var schedule = JSON.parse(data);
-            showGames(schedule);
+            console.log(schedule);
+            showGames(schedule, "today");
         },
         error: function (jqXHR, status) {
             alert("error");
@@ -23,32 +30,116 @@ function initializeNBA() {
     });
 }
 
-function showGames(schedule) {
+// Show all games of the given day
+function showGames(schedule, day) {
+    // Set the day header
+    document.getElementById("dayHeader").innerHTML = day.charAt(0).toUpperCase() + day.slice(1);
+    // Get the contentContainer and clear it
     var contentContainer = document.getElementById("contentContainer");
     contentContainer.innerHTML = "";
-    for (let i = 0; i < schedule["tomorrow"].length;  i++) {
-        const game = schedule["tomorrow"][i];
+    
+    // Loop through the games
+    for (let i = 0; i < schedule[day].length;  i++) {
+        const game = schedule[day][i];
+        // Get teams from gameUrlCode and compile gameHeader
         const gameUrlCode = game["gameUrlCode"];
         var team1 = gameUrlCode.substr(gameUrlCode.length-6, 3);
         var team2 = gameUrlCode.substr(gameUrlCode.length-3);
         var gameHeader = team1 + "@" + team2;
+
+        // If in playoffs show current round results
         if (game["playoffs"]) {
             gameHeader += " (" + game["playoffs"]["vTeam"]["seriesWin"] + "-" + game["playoffs"]["hTeam"]["seriesWin"] + ")";
         }
-        var date = new Date(game["startTimeUTC"]);
-        var hours = date.getHours();
-        if (hours < 10) {
-            hours = "0" + hours;
+
+        // If game has been played show score, otherwise show time
+        var subHeaderText
+        if (game["hTeam"]["score"] && game["vTeam"]["score"]) {
+            subHeaderText = game["vTeam"]["score"] + "-" + game["hTeam"]["score"];
         }
-        var minutes = date.getMinutes();
-        if (minutes < 10) {
-            minutes = "0" + minutes;
+        else {
+            var date = new Date(game["startTimeUTC"]);
+            var hours = date.getHours();
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+            var minutes = date.getMinutes();
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+            subHeaderText = hours + ":" + minutes;
         }
-        console.log(game);
+
+        // Generate div
         contentContainer.innerHTML += `<div class='gameContainer'>
             <h1>` + gameHeader + `</h1>
-            <h2>` + hours + ":" + minutes + `</h2>
+            <h2>` + subHeaderText + `</h2>
             </div>`;
     }
+
+    // Display message if there are no games that day
+    if (schedule[day].length == 0) {
+        contentContainer.innerHTML += `<div class='gameContainer'>
+        <h1> No games today </h1>
+        </div>`;
+    }
+
+    // Add page indicators
+    document.getElementById("pageIndicatorContainer").innerHTML = `
+    <div id="dot1" class="dot open"></div> <div id="dot2" class="dot open"></div> <div id="dot3" class="dot open"></div>
+    `;
+
+    // Indicate correct indicator
+    if (day == "yesterday") {
+        document.getElementById("dot1").classList = "dot";
+    }
+    else if (day == "today") {
+        document.getElementById("dot2").classList = "dot";
+    }
+    else if (day == "tomorrow") {
+        document.getElementById("dot3").classList = "dot";
+    }
+
+    // Slide all divs in
+    slideIn(schedule[day].length);
+
+    // Slide out after 7 seconds
+    preSlideDelayTimer = setTimeout(function () {
+        slideOut(schedule, day);
+    }, 7000);
 }
 
+// Once the gameContainers have loaded set their left position to 0, to slide them into view
+function slideIn(gameNo) {
+    var interval = setInterval(function () {
+        var games = document.getElementsByClassName("gameContainer");
+        if (games.length == gameNo || (games.length == 1 & gameNo == 0)) {
+            for (let i = 0; i < games.length; i++) {
+                var game = games[i];
+                game.style.left = "0px";
+            }
+            clearInterval(interval);
+        }
+    }, 10);
+}
+
+// Slide all existing game containers out of view and show games for the next day
+function slideOut(schedule, day) {
+    var games = document.getElementsByClassName("gameContainer");
+    for (let i = 0; i < games.length; i++) {
+        var game = games[i];
+        game.style.left = "260px";
+    }
+    setTimeout(function () {
+        if (day == "yesterday") {
+            day = "today";
+        }
+        else if (day == "today") {
+            day = "tomorrow";
+        }
+        else {
+            day = "yesterday";
+        }
+        showGames(schedule, day);
+    }, 600);
+}
