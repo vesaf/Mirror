@@ -74,17 +74,6 @@ router.post('/status', function (req, res) {
   res.end();
 });
 
-// router.get("/screendims", function (req, res) {
-//   console.log(dims);
-//   res = setHeaders(res);
-//   if (dims) {
-//     res.send(dims).end();
-//   }
-//   else {
-//     res.sendStatus(400);
-//   }
-// });
-
 router.get('/nba', function (req, res) {
   // Set day (generally just today but can be set for testing purposes)
   var today = new Date();
