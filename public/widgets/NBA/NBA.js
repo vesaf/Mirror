@@ -6,23 +6,26 @@ window.addEventListener("load", function() {
         <div id="contentContainer"></div>
         <div id="pageIndicatorContainer"></div>
     </div>`;
-    initializeWidget("NBA", html, css, initializeNBA);
+    initializeWidget("NBA", html, css, initializeNBA, closeNBA);
 });
 
 // Declare timer globally such that each function may cancel it
 var preSlideDelayTimer;
+var slideOutTimer;
+var scrollInterval;
+var slideInInterval;
 
-// Get NBA data
-function initializeNBA() {
-    // Cancel any pre-existing slide timers
-    clearTimeout(preSlideDelayTimer);
-    
+// Set after how many full rotations the data are refreshed
+const refreshRate = 7;
+const startDay = "yesterday"
+
+// Get NBA data and start new rotation
+function initializeNBA() {    
     jQuery.ajax({
         url: "/app/nba",
         success: function (data, status, jqXHR) {
             var schedule = JSON.parse(data);
-            console.log(schedule);
-            showGames(schedule, "today");
+            showGames(schedule, startDay, 0);
         },
         error: function (jqXHR, status) {
             alert("error");
@@ -30,16 +33,25 @@ function initializeNBA() {
     });
 }
 
+// Cancel all timeouts set by this widget
+function closeNBA() {
+    clearTimeout(preSlideDelayTimer);
+    clearTimeout(slideOutTimer);
+    clearInterval(scrollInterval);
+    clearInterval(slideInInterval);
+}
+
 // Show all games of the given day
-function showGames(schedule, day) {
+function showGames(schedule, day, rotation) {
     // Set the day header
     document.getElementById("dayHeader").innerHTML = day.charAt(0).toUpperCase() + day.slice(1);
     // Get the contentContainer and clear it
     var contentContainer = document.getElementById("contentContainer");
     contentContainer.innerHTML = "";
+    contentContainer.scrollTo(0,0);
     
     // Loop through the games
-    const gameNo = (schedule[day]) ? schedule[day].length : 0;
+    var gameNo = (schedule[day]) ? schedule[day].length : 0;
     for (let i = 0; i < gameNo;  i++) {
         // Generate headers
         const headers = generateHeaders(schedule[day][i]);
@@ -57,6 +69,8 @@ function showGames(schedule, day) {
         <h1> No games today </h1>
         </div>`;
     }
+
+    gameNo = insertFakeGames(0, gameNo, contentContainer);
 
     // Add page indicators
     document.getElementById("pageIndicatorContainer").innerHTML = `
@@ -78,12 +92,69 @@ function showGames(schedule, day) {
     document.getElementById(dotId).classList = "dot";
 
     // Slide all divs in
-    slideIn(gameNo);
+    slideIn(gameNo, function () {
+        // Sroll if necessary and then slide out after 7 seconds
+        preSlideDelayTimer = setTimeout(function () {
+            scroll(gameNo, function () {
+                slideOut(schedule, day, rotation);
+            });
+        }, 7000);
+    });
 
-    // Slide out after 7 seconds
-    preSlideDelayTimer = setTimeout(function () {
-        slideOut(schedule, day);
-    }, 7000);
+
+}
+
+// Scroll down if there are too many games to show in one screen
+function scroll(gameNo, callback) {
+    var contentContainer = document.getElementById("contentContainer");
+    const contentContainerHeight = contentContainer.clientHeight;
+    var representativeGameContainer = document.getElementsByClassName("gameContainer")[0];
+    const gameContainerHeight = representativeGameContainer.clientHeight;
+    const totalGameHeight = (gameNo == 0) ? gameContainerHeight : gameNo * gameContainerHeight;
+
+    if (totalGameHeight > contentContainerHeight) {
+        //elapsed
+        var elapsed;
+        //duration in milli seconds
+        var duration = 1000 * (gameNo - contentContainerHeight/gameContainerHeight);
+        //start time, when the animation starts
+        var startTime = (new Date()).getTime(); //start time
+        //the magic
+        scrollInterval = setInterval(function () {
+            //calculate elapse time 
+            elapsed = (new Date()).getTime() - startTime;
+            //check if elapse time is less than duration
+            if (elapsed < duration) {
+                //animate using an easing equation
+                contentContainer.scrollTo(0, ease(elapsed, contentContainerHeight, duration));
+            } else {
+                //animation is complete, stop interval timer
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+                preSlideDelayTimer = setTimeout(callback, 7000);
+            }
+        }, 4);
+    }
+    else {
+        callback();
+    }
+
+    //Info about the letters
+    //t = elapsed time 
+    //c = change in comparison to begin
+    //d = duration of animation
+    function ease(elapsed, target, duration) {
+        return Math.round(-target * Math.cos(elapsed / duration * (Math.PI / 2)) + target);
+    }
+}
+
+function insertFakeGames(fakeGameNo, realGameNo, contentContainer) {
+    for (let i = 0; i < fakeGameNo; i++) {
+        contentContainer.innerHTML += `<div class='gameContainer'>
+        <h1> No games today </h1>
+        </div>`;
+    }
+    return fakeGameNo + realGameNo;
 }
 
 // Generate texts to show in game divs using the set structure of the given data
@@ -120,27 +191,32 @@ function generateHeaders(game) {
 }
 
 // Once the gameContainers have loaded set their left position to 0, to slide them into view
-function slideIn(gameNo) {
-    var interval = setInterval(function () {
+function slideIn(gameNo, callback) {
+    slideInInterval = setInterval(function () {
         var games = document.getElementsByClassName("gameContainer");
-        if (games.length == gameNo || (games.length == 1 & gameNo == 0)) {
+        if (games.length == gameNo || (games.length == 1 && gameNo == 0)) {
             for (let i = 0; i < games.length; i++) {
                 var game = games[i];
                 game.style.left = "0px";
             }
-            clearInterval(interval);
+            clearInterval(slideInInterval);
+            callback();
         }
     }, 10);
 }
 
 // Slide all existing game containers out of view and show games for the next day
-function slideOut(schedule, day) {
+function slideOut(schedule, day, rotation) {
+    // Slide out all game containers
     var games = document.getElementsByClassName("gameContainer");
     for (let i = 0; i < games.length; i++) {
         var game = games[i];
         game.style.left = "260px";
     }
-    setTimeout(function () {
+
+    // Wait for slide animation to end
+    slideOutTimer = setTimeout(function () {
+        // Set to next day
         switch(day) {
             case "yesterday":
                 day = "today";
@@ -151,15 +227,18 @@ function slideOut(schedule, day) {
             default:
                 day = "yesterday"
         }
-        // if (day == "yesterday") {
-        //     day = "today";
-        // }
-        // else if (day == "today") {
-        //     day = "tomorrow";
-        // }
-        // else {
-        //     day = "yesterday";
-        // }
-        showGames(schedule, day);
+
+        // If full rotation done increase rotation counter
+        if (day == startDay) {
+            rotation++;
+        }
+
+        // If refreshRate reached, refresh data, otherwise start new rotation
+        if (rotation >= refreshRate) {
+            initializeNBA();
+        }
+        else {
+            showGames(schedule, day, rotation);
+        }
     }, 600);
 }

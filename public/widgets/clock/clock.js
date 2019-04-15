@@ -13,8 +13,13 @@ window.addEventListener("load", function() {
             <p id="statusTime"></p>
         </div>
     </div>`;//'<p class="clockWidget" id="clock"></p>';
-    initializeWidget("clock", html, css, startClock);
+    initializeWidget("clock", html, css, startClock, stopClock);
 });
+
+var secondInterval;
+function stopClock() {
+    clearInterval(secondInterval);
+}
 
 function startClock() {
     document.getElementsByClassName("widgetCover")[document.getElementsByClassName("widgetCover").length-1].style.position = "absolute";
@@ -91,5 +96,5 @@ function progressBarUpdate(x, outOf) {
 // Helper function
 function setIntervalAndExecute(fn, t) {
     fn();
-    window.setInterval(fn, t);
+    secondInterval = window.setInterval(fn, t);
 }

@@ -1,4 +1,4 @@
-function createWidget(name, left, top, contentText, cssText, callback) {
+function createWidget(name, left, top, contentText, cssText, callback, removeAction = undefined) {
     var container = document.getElementById("container");
 
     // Create outer frame for widget
@@ -87,6 +87,7 @@ function createWidget(name, left, top, contentText, cssText, callback) {
         minimize.style.backgroundColor = "#FFFFFF";
     });
     minimize.addEventListener("click", function() {
+        if (removeAction !== undefined) removeAction();
         frame.parentElement.removeChild(frame);
         initializedWidgets[name].open = false;
     });
@@ -96,11 +97,11 @@ var iconX = 30;
 var iconY = 90;
 // TODO: next column if full
 var initializedWidgets = {};
-function initializeWidget(name, content, css, callback) {
+function initializeWidget(name, content, css, callback, removeAction = undefined) {
     initializedWidgets[name] = {open: false};
     createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", name, function () {
         if (initializedWidgets[name].open == false) {
-            createWidget(name, iconX, iconY, content, css, callback);
+            createWidget(name, iconX, iconY, content, css, callback, removeAction);
             initializedWidgets[name].open = true;
         }
         
