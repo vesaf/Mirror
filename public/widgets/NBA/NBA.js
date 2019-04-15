@@ -17,7 +17,7 @@ var slideInInterval;
 
 // Set after how many full rotations the data are refreshed
 const refreshRate = 7;
-const startDay = "yesterday"
+const startDay = "today"
 
 // Get NBA data and start new rotation
 function initializeNBA() {    
@@ -70,6 +70,7 @@ function showGames(schedule, day, rotation) {
         </div>`;
     }
 
+    // Adds fake game containers for testing purposes
     gameNo = insertFakeGames(0, gameNo, contentContainer);
 
     // Add page indicators
@@ -148,6 +149,7 @@ function scroll(gameNo, callback) {
     }
 }
 
+// Adds fake game containers for testing purposes
 function insertFakeGames(fakeGameNo, realGameNo, contentContainer) {
     for (let i = 0; i < fakeGameNo; i++) {
         contentContainer.innerHTML += `<div class='gameContainer'>
