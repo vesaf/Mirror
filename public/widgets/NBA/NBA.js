@@ -213,7 +213,7 @@ function slideOut(schedule, day, rotation) {
     var games = document.getElementsByClassName("gameContainer");
     for (let i = 0; i < games.length; i++) {
         var game = games[i];
-        game.style.left = "260px";
+        game.style.left = "-260px";
     }
 
     // Wait for slide animation to end

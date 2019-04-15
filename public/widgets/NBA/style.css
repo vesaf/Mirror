@@ -48,7 +48,7 @@ h2 {
 
 .gameContainer {
     position: relative;
-    left: -260px;
+    left: 260px;
     height: 85px;
     border: 2px solid white;
     margin: 0 -2px;
