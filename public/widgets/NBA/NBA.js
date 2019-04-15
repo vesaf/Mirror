@@ -39,46 +39,20 @@ function showGames(schedule, day) {
     contentContainer.innerHTML = "";
     
     // Loop through the games
-    for (let i = 0; i < schedule[day].length;  i++) {
-        const game = schedule[day][i];
-        // Get teams from gameUrlCode and compile gameHeader
-        const gameUrlCode = game["gameUrlCode"];
-        var team1 = gameUrlCode.substr(gameUrlCode.length-6, 3);
-        var team2 = gameUrlCode.substr(gameUrlCode.length-3);
-        var gameHeader = team1 + "@" + team2;
-
-        // If in playoffs show current round results
-        if (game["playoffs"]) {
-            gameHeader += " (" + game["playoffs"]["vTeam"]["seriesWin"] + "-" + game["playoffs"]["hTeam"]["seriesWin"] + ")";
-        }
-
-        // If game has been played show score, otherwise show time
-        var subHeaderText
-        if (game["hTeam"]["score"] && game["vTeam"]["score"]) {
-            subHeaderText = game["vTeam"]["score"] + "-" + game["hTeam"]["score"];
-        }
-        else {
-            var date = new Date(game["startTimeUTC"]);
-            var hours = date.getHours();
-            if (hours < 10) {
-                hours = "0" + hours;
-            }
-            var minutes = date.getMinutes();
-            if (minutes < 10) {
-                minutes = "0" + minutes;
-            }
-            subHeaderText = hours + ":" + minutes;
-        }
-
+    const gameNo = (schedule[day]) ? schedule[day].length : 0;
+    for (let i = 0; i < gameNo;  i++) {
+        // Generate headers
+        const headers = generateHeaders(schedule[day][i]);
+        
         // Generate div
         contentContainer.innerHTML += `<div class='gameContainer'>
-            <h1>` + gameHeader + `</h1>
-            <h2>` + subHeaderText + `</h2>
+            <h1>` + headers["gameHeader"] + `</h1>
+            <h2>` + headers["subHeaderText"] + `</h2>
             </div>`;
     }
 
     // Display message if there are no games that day
-    if (schedule[day].length == 0) {
+    if (gameNo == 0) {
         contentContainer.innerHTML += `<div class='gameContainer'>
         <h1> No games today </h1>
         </div>`;
@@ -90,23 +64,59 @@ function showGames(schedule, day) {
     `;
 
     // Indicate correct indicator
-    if (day == "yesterday") {
-        document.getElementById("dot1").classList = "dot";
+    var dotId;
+    switch(day) {
+        case "yesterday":
+            dotId = "dot1";
+            break;
+        case "today":
+            dotId = "dot2";
+            break;
+        default:
+            dotId = "dot3";
     }
-    else if (day == "today") {
-        document.getElementById("dot2").classList = "dot";
-    }
-    else if (day == "tomorrow") {
-        document.getElementById("dot3").classList = "dot";
-    }
+    document.getElementById(dotId).classList = "dot";
 
     // Slide all divs in
-    slideIn(schedule[day].length);
+    slideIn(gameNo);
 
     // Slide out after 7 seconds
     preSlideDelayTimer = setTimeout(function () {
         slideOut(schedule, day);
     }, 7000);
+}
+
+// Generate texts to show in game divs using the set structure of the given data
+function generateHeaders(game) {
+    // Get teams from gameUrlCode and compile gameHeader
+    const gameUrlCode = game["gameUrlCode"];
+    var team1 = gameUrlCode.substr(gameUrlCode.length-6, 3);
+    var team2 = gameUrlCode.substr(gameUrlCode.length-3);
+    var gameHeader = team1 + "@" + team2;
+
+    // If in playoffs show current round results
+    if (game["playoffs"]) {
+        gameHeader += " (" + game["playoffs"]["vTeam"]["seriesWin"] + "-" + game["playoffs"]["hTeam"]["seriesWin"] + ")";
+    }
+
+    // If game has been played show score, otherwise show time
+    var subHeaderText
+    if (game["hTeam"]["score"] && game["vTeam"]["score"]) {
+        subHeaderText = game["vTeam"]["score"] + "-" + game["hTeam"]["score"];
+    }
+    else {
+        var date = new Date(game["startTimeUTC"]);
+        var hours = date.getHours();
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        var minutes = date.getMinutes();
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        subHeaderText = hours + ":" + minutes;
+    }
+    return {gameHeader: gameHeader, subHeaderText: subHeaderText}
 }
 
 // Once the gameContainers have loaded set their left position to 0, to slide them into view
@@ -131,15 +141,25 @@ function slideOut(schedule, day) {
         game.style.left = "260px";
     }
     setTimeout(function () {
-        if (day == "yesterday") {
-            day = "today";
+        switch(day) {
+            case "yesterday":
+                day = "today";
+                break;
+            case "today":
+                day = "tomorrow";
+                break;
+            default:
+                day = "yesterday"
         }
-        else if (day == "today") {
-            day = "tomorrow";
-        }
-        else {
-            day = "yesterday";
-        }
+        // if (day == "yesterday") {
+        //     day = "today";
+        // }
+        // else if (day == "today") {
+        //     day = "tomorrow";
+        // }
+        // else {
+        //     day = "yesterday";
+        // }
         showGames(schedule, day);
     }, 600);
 }
