@@ -73,12 +73,37 @@ router.post('/status', function (req, res) {
   if (data) {
     console.log(data);
     status = data;
-    if (status.id === 1) {
-      lastWidget = status.options.widget;
+    switch(status.id) {
+      // Open widget
+      case 1:
+        lastWidget = status.options.widget;
+        break;
+      // Close widget
+      case 2:
+        lastWidget = undefined;
+        break;
+      // Started moving widget in app
+      case 3:
+        break;
+      // Stopped moving widget in app
+      case 4:
+        break
+      default:
+        console.error("Unknown status");
     }
-    else if (status.id === 2) {
-      lastWidget = undefined;
-    }
+    // if (status.id === 1) {
+    //   lastWidget = status.options.widget;
+    // }
+    // // Close widget
+    // else if (status.id === 2) {
+    //   lastWidget = undefined;
+    // }
+    // else if (status.id === 3) {
+
+    // }
+    // else if (status.id === 4) {
+
+    // }
   }
   res = setHeaders(res);
   // console.log(res);

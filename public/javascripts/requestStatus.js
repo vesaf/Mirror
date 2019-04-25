@@ -39,7 +39,22 @@ function functionCalls(id, options) {
                 // resetLastAppWidget(options.widget);
                 document.getElementById(options.widget + "Minimize").click();
             }
+            break;
+        case 3:
+            // Stop tracking movement by adding class to widget
+            if (options.widget && document.getElementById(options.widget + "Minimize")) {
+                document.getElementById(options.widget + "Widget").classList.add("noTrack");
+            }
+            break;
+        case 4:
+            // Start tracking movements again
+            if (options.widget && document.getElementById(options.widget + "Minimize")) {
+                document.getElementById(options.widget + "Widget").classList.remove("noTrack");
+            }
+            break;
         default:
-            console.error("The server wants to tell you something but it doesn't know how to.")
+            console.error("The server wants to tell you something but it doesn't know how to.");
+            console.log(id);
+            console.log(options);
     }
 }

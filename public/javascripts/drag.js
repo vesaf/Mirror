@@ -30,9 +30,9 @@ window.addEventListener("load", function() {
         lastCoords.x = undefined;
         lastCoords.y = undefined;
     });
-    // If an item has been selected, move it as cursor moves
+    // If an item has been selected and it is not currently being moved in the app, move it as cursor moves
     window.addEventListener("mousemove", function(e) {
-        if (holdDown) {
+        if (holdDown && !holdDown.classList.contains("noTrack")) {
             // Make sure you don't go off screen horizontally
             var xSet = false;
             if ((window.innerWidth <= holdDown.offsetLeft + holdDown.offsetWidth && e.x - lastCoords.x > 0) ||
