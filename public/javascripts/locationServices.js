@@ -4,10 +4,9 @@ var intervalTime = 100;
 var connectionLostNotificationSent = false;
 // Start interval at each of which status checks are performed
 var statusInterval = setInterval(function () {
-
     if (lastAppWidget) {
         var widgetElement = document.getElementById(lastAppWidget + "Widget");
-        if (widgetElement) {
+        if (widgetElement && !widgetElement.classList.contains("noTrack")) {
             // // Request status
             jQuery.ajax({
                 url: "/app/widgetlocation",
@@ -36,4 +35,18 @@ function resetLastAppWidget(name) {
     if (lastAppWidget === name) {
         lastAppWidget = undefined;
     }
+}
+
+var requestLocationInterval;
+
+function requestLocation () {
+    $.ajax({
+        url: "/app/widgetlocation",
+        success: function (widgetLocation) {
+            console.log(widgetLocation);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 }

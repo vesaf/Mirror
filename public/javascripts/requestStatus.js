@@ -41,15 +41,17 @@ function functionCalls(id, options) {
             }
             break;
         case 3:
-            // Stop tracking movement by adding class to widget
+            // Stop tracking on mirror movement by adding class to widget
             if (options.widget && document.getElementById(options.widget + "Minimize")) {
                 document.getElementById(options.widget + "Widget").classList.add("noTrack");
+                requestLocationInterval = setInterval(requestLocation, intervalTime);
             }
             break;
         case 4:
-            // Start tracking movements again
+            // Start tracking on mirror movements again
             if (options.widget && document.getElementById(options.widget + "Minimize")) {
                 document.getElementById(options.widget + "Widget").classList.remove("noTrack");
+                clearInterval(requestLocationInterval);
             }
             break;
         default:

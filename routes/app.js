@@ -29,7 +29,15 @@ router.post('/widgetlocationapp', function (req, res) {
 
 var widgetLocation;
 router.post('/widgetLocation', function (req, res) {
-  widgetLocation = req.body;
+  if (Object.keys(req.body).length === 1) {
+    widgetLocation = Object.keys(req.body)[0];
+  }
+  else {
+    widgetLocation = req.body;
+  }
+
+  console.log(widgetLocation);
+  res = setHeaders(res);
   res.end();
 });
 
