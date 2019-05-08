@@ -16,17 +16,6 @@ router.get('/widgetnames', function (req, res) {
   });
 });
 
-// TODO: Maybe move to regular widgetlocation path
-router.post('/widgetlocationapp', function (req, res) {
-  var data = JSON.parse(Object.keys(req.body)[0]);
-  if (data) {
-    console.log(data);
-  }
-  res = setHeaders(res);
-  // console.log(res);
-  res.end();
-});
-
 var widgetLocation;
 router.post('/widgetLocation', function (req, res) {
   if (Object.keys(req.body).length === 1) {
@@ -36,7 +25,6 @@ router.post('/widgetLocation', function (req, res) {
     widgetLocation = req.body;
   }
 
-  console.log(widgetLocation);
   res = setHeaders(res);
   res.end();
 });
