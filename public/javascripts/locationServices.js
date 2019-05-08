@@ -39,11 +39,13 @@ function resetLastAppWidget(name) {
 
 var requestLocationInterval;
 
-function requestLocation () {
+function requestLocation (widget) {
     $.ajax({
         url: "/app/widgetlocation",
         success: function (widgetLocation) {
-            console.log(widgetLocation);
+            widgetLocation = JSON.parse(widgetLocation);
+            widget.style.left = widgetLocation["x"] + "px";
+            widget.style.top = widgetLocation["y"] + "px";
         },
         error: function (err) {
             console.log(err);

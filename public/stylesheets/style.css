@@ -31,6 +31,7 @@ html, body {
     left: 40px;
     z-index: 1;
     background-color: #000000;
+    transition: top 0.3s, left 0.3s;
 }
 
 .activeWidget {

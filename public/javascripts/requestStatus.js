@@ -43,8 +43,11 @@ function functionCalls(id, options) {
         case 3:
             // Stop tracking on mirror movement by adding class to widget
             if (options.widget && document.getElementById(options.widget + "Minimize")) {
-                document.getElementById(options.widget + "Widget").classList.add("noTrack");
-                requestLocationInterval = setInterval(requestLocation, intervalTime);
+                const widget = document.getElementById(options.widget + "Widget");
+                widget.classList.add("noTrack");
+                requestLocationInterval = setInterval(function () {
+                    requestLocation(widget);
+                }, intervalTime);
             }
             break;
         case 4:
