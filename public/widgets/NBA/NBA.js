@@ -48,7 +48,7 @@ function showGames(schedule, day, rotation) {
     // Get the contentContainer and clear it
     var contentContainer = document.getElementById("contentContainer");
     contentContainer.innerHTML = "";
-    contentContainer.scrollTo(0,0);
+    contentContainer.scrollTop = 0;
     
     // Loop through the games
     var gameNo = (schedule[day]) ? schedule[day].length : 0;
@@ -108,7 +108,7 @@ function showGames(schedule, day, rotation) {
 // Scroll down if there are too many games to show in one screen
 function scroll(gameNo, callback) {
     var contentContainer = document.getElementById("contentContainer");
-    const contentContainerHeight = contentContainer.clientHeight;
+    const contentContainerHeight = contentContainer.offsetHeight;
     var representativeGameContainer = document.getElementsByClassName("gameContainer")[0];
     const gameContainerHeight = representativeGameContainer.clientHeight;
     const totalGameHeight = (gameNo == 0) ? gameContainerHeight : gameNo * gameContainerHeight;
@@ -127,7 +127,7 @@ function scroll(gameNo, callback) {
             //check if elapse time is less than duration
             if (elapsed < duration) {
                 //animate using an easing equation
-                contentContainer.scrollTo(0, ease(elapsed, contentContainerHeight, duration));
+                contentContainer.scrollTop = ease(elapsed, gameNo * gameContainerHeight, duration);
             } else {
                 //animation is complete, stop interval timer
                 clearInterval(scrollInterval);
