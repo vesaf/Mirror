@@ -3,19 +3,28 @@ var router = express.Router();
 var fs = require('fs');
 var request = require("request");
 
+// Allow app to check if ip works
 router.get('/ping', function (req, res) {
+  console.log("App connected");
   res = setHeaders(res);
   res.sendStatus(200);
 });
 
+// Send widget names to app
 router.get('/widgetnames', function (req, res) {
   fs.readdir("./public/widgets", function (err, files) {
     if (err) console.error(err);
+    
+    // Don't send widgets in __dev__ folder
+    if (files.indexOf("__dev__")) {
+      files.splice(files.indexOf("__dev__"), 1);
+    }
     res = setHeaders(res);
     res.end(files.toString());
   });
 });
 
+// Allow app and mirror to set the location of the widget
 var widgetLocation;
 router.post('/widgetLocation', function (req, res) {
   if (Object.keys(req.body).length === 1) {
@@ -29,19 +38,21 @@ router.post('/widgetLocation', function (req, res) {
   res.end();
 });
 
+// Allow app and mirror to get the location of the widget
 router.get('/widgetlocation', function (req, res) {
   res = setHeaders(res);
   res.send(widgetLocation).end();
 });
 
+// Allow mirror to set the dimensions of the mirror
 var dims;
 router.post('/screendims', function (req, res) {
   dims = req.body;
   res.end();
 });
 
+// Allow app to get the dimensions of the mirror
 router.get("/screendims", function (req, res) {
-  console.log(dims);
   res = setHeaders(res);
   if (dims) {
     res.send(dims).end();
@@ -87,25 +98,12 @@ router.post('/status', function (req, res) {
       default:
         console.error("Unknown status");
     }
-    // if (status.id === 1) {
-    //   lastWidget = status.options.widget;
-    // }
-    // // Close widget
-    // else if (status.id === 2) {
-    //   lastWidget = undefined;
-    // }
-    // else if (status.id === 3) {
-
-    // }
-    // else if (status.id === 4) {
-
-    // }
   }
   res = setHeaders(res);
-  // console.log(res);
   res.end();
 });
 
+// Send all NBA data to the app
 router.get('/nba', function (req, res) {
   // Set day (generally just today but can be set for testing purposes)
   var today = new Date();
@@ -165,6 +163,7 @@ router.get('/nba', function (req, res) {
   });
 });
 
+// Helper function that sets the res object
 function setHeaders(res) {
   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');

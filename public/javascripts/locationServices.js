@@ -7,7 +7,7 @@ var statusInterval = setInterval(function () {
     if (lastAppWidget) {
         var widgetElement = document.getElementById(lastAppWidget + "Widget");
         if (widgetElement && !widgetElement.classList.contains("noTrack")) {
-            // // Request status
+            // Request status
             jQuery.ajax({
                 url: "/app/widgetlocation",
                 type: "POST",
@@ -26,6 +26,7 @@ window.addEventListener("beforeunload", function () {
     clearInterval(statusInterval);
 });
 
+// Variable that holds name of last widget opened with app
 var lastAppWidget;
 function setLastAppWidget(name) {
     lastAppWidget = name;
@@ -48,7 +49,7 @@ function requestLocation (widget) {
             widget.style.top = widgetLocation["y"] + "px";
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
         }
     });
 }

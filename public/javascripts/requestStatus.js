@@ -1,6 +1,7 @@
 // Set times between intervals
 var intervalTime = 500;
 
+// TODO: connection lost notification
 var connectionLostNotificationSent = false;
 // Start interval at each of which status checks are performed
 var statusInterval = setInterval(function () {
@@ -32,6 +33,11 @@ function functionCalls(id, options) {
             if (options.widget && document.getElementById(options.widget)) {
                 document.getElementById(options.widget).click();
                 setLastAppWidget(options.widget);
+                // console.log(document.getElementsByClassName("activeWidget"));
+                // if (document.getElementsByClassName("activeWidget").length > 0){
+                //     document.getElementsByClassName("activeWidget")[0].classList.remove("activeWidget");
+                // }
+                // document.getElementById(options.widget).className += "activeWidget";
             }
             break;
         case 2:

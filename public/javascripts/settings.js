@@ -55,7 +55,6 @@ function openSettings() {
         qr.addData("http://" + window.location.host);
         qr.make();
         document.getElementById("placeHolder").innerHTML = qr.createSvgTag();
-        console.log(window.location);
     }
 }
 
