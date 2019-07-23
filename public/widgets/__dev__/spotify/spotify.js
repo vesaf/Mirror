@@ -1,15 +1,15 @@
-var player;
-window.addEventListener("load", function() {    
-    var css = '<link rel="stylesheet" type="text/css" href="widgets/spotify/style.css">';
-    var html = `<div></div>`;
-    initializeWidget("spotify", html, css, startSpotify);
-    setupSpotify();
-    // console.log(getParameterByName('code'));
-    // jQuery.ajax({
-    //     type: "POST",
+var css = '<link rel="stylesheet" type="text/css" href="widgets/spotify/style.css">';
+var html = `<div></div>`;
+initializeWidget("spotify", html, css, startSpotify);
+setupSpotify();
+// console.log(getParameterByName('code'));
+// jQuery.ajax({
+//     type: "POST",
 
-    // })
-});
+// })
+
+var player;
+
 function startSpotify() {
     // Connect to the player!
     player.connect();

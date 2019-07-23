@@ -1,20 +1,20 @@
-window.addEventListener("load", function() {
-    var css = '<link rel="stylesheet" type="text/css" href="widgets/clock/style.css">';
-    var html = `<div class="pie">
-        <div class="clip1">
-            <div class="slice1"></div>
-        </div>
-        <div class="clip2">
-            <div class="slice2"></div>
-        </div>
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Space Mono">
-        <div class="status">
-            
-            <p id="statusTime"></p>
-        </div>
-    </div>`;//'<p class="clockWidget" id="clock"></p>';
-    initializeWidget("clock", html, css, startClock, stopClock);
-});
+// Set css file and html content
+var css = '<link rel="stylesheet" type="text/css" href="widgets/clock/style.css">';
+var html = `<div class="pie">
+    <div class="clip1">
+        <div class="slice1"></div>
+    </div>
+    <div class="clip2">
+        <div class="slice2"></div>
+    </div>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Space Mono">
+    <div class="status">
+        
+        <p id="statusTime"></p>
+    </div>
+</div>`;
+// Start widget
+initializeWidget("clock", html, css, startClock, stopClock);
 
 var secondInterval;
 function stopClock() {

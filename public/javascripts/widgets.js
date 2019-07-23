@@ -1,3 +1,22 @@
+// When page has loaded load widget js files
+window.addEventListener("load", function() {
+    $.ajax({
+        url: window.location + "app/widgetnames",
+        success: function (widgets) {
+            widgets = widgets.split(",");
+            // Load js for each settings category
+            for (let i = 0; i < widgets.length; i++) {
+                let widgetsScript = document.createElement("script");
+                widgetsScript.setAttribute("src", "widgets/" + widgets[i] + "/" + widgets[i] + ".js");
+                document.head.appendChild(widgetsScript);
+            }
+        },
+        error: function () {
+            alert("Kon de widgets niet ophalen. Sluit de app, herstart de spiegel en probeer het opnieuw.");
+        }
+    });
+});
+
 function createWidget(name, left, top, contentText, cssText, callback, removeAction = undefined) {
     var container = document.getElementById("container");
 

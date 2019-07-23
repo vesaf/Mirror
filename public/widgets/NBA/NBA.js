@@ -1,13 +1,11 @@
-var clockInterval
-window.addEventListener("load", function() {
-    var css = '<link rel="stylesheet" type="text/css" href="widgets/NBA/style.css">';
-    var html = `<div id="NBAContainer">
-        <h1 id="dayHeader"></h1>
-        <div id="contentContainer"></div>
-        <div id="pageIndicatorContainer"></div>
-    </div>`;
-    initializeWidget("NBA", html, css, initializeNBA, closeNBA);
-});
+var css = '<link rel="stylesheet" type="text/css" href="widgets/NBA/style.css">';
+var html = `<div id="NBAContainer">
+    <h1 id="dayHeader"></h1>
+    <div id="contentContainer"></div>
+    <div id="pageIndicatorContainer"></div>
+</div>`;
+initializeWidget("NBA", html, css, initializeNBA, closeNBA);
+
 
 // Declare timer globally such that each function may cancel it
 var preSlideDelayTimer;
