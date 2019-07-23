@@ -16,7 +16,7 @@ router.get('/widgetnames', function (req, res) {
     if (err) console.error(err);
     
     // Don't send widgets in __dev__ folder
-    if (files.indexOf("__dev__")) {
+    if (files.indexOf("__dev__") >= 0) {
       files.splice(files.indexOf("__dev__"), 1);
     }
     res = setHeaders(res);
