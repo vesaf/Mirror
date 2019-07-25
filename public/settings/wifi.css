@@ -1,0 +1,45 @@
+.networkContainer {
+    color: #ffffff;
+    padding-left: 35px;
+}
+
+.networkContainer:hover {
+    color: #000000;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+#networkListContainer {
+    margin-top: 45px;
+}
+
+.networkName {
+    font-size: 2em;
+    display: inline;
+}
+
+.networkContainer:hover #wifiIcon {
+    fill: #000000
+}
+
+#wifiIconSVG {
+    height: 2em;
+}
+
+.securityIndicator {
+    display: inline-block;
+}
+
+#lockIcon {
+    margin: auto;
+    margin-top: 5px;
+    display: block;
+    height: 1em;
+}
+
+.securityType {
+    margin: 0;
+    font-size: 0.5em;
+    width: 30px;
+    text-align: center;
+}

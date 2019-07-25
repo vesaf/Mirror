@@ -1,3 +1,4 @@
+var target
 window.addEventListener("load", () => {
     // Get coordinates for next icon
     var coords = getNextIconXY();
@@ -46,6 +47,15 @@ window.addEventListener("load", () => {
         // Run setting prepare script
         if (eval(e.detail).prepareScript) {
             eval(e.detail).prepareScript();
+        }
+
+        // Load setting CSS
+        if (eval(e.detail).css) {
+            let settingsCSS = document.createElement("link");
+            settingsCSS.setAttribute("rel", "stylesheet");
+            settingsCSS.setAttribute("type", "text/css");
+            settingsCSS.setAttribute("href", "settings/" + e.detail + ".css");
+            document.head.appendChild(settingsCSS);
         }
         
         // Delete loaded setting from list of unloaded settings
@@ -118,15 +128,15 @@ window.addEventListener("load", () => {
             document.getElementsByClassName("active")[0].classList.remove("active");
 
             let newSetting = parseInt(e.target.getAttribute("settingNo"));
-            if (e.target.classList.contains("settingsMenuItem")) {
-                e.target.classList.add("active");
-                e.target.childNodes[0].classList.add("active");
+            if (e.target.classList.contains("settingsMenuItemText")) {
+                target = e.target.parentNode;
             }
             else {
-                e.target.classList.add("active");
-                e.target.parentNode.classList.add("active");
+                target = e.target
             }
-            settingsContent.innerHTML = settingsCategories[0].html;
+            target.classList.add("active");
+            target.childNodes[1].classList.add("active");
+            settingsContent.innerHTML = settingsCategories[newSetting].html;
             settingsCategories[newSetting].openScript();
         }
     }

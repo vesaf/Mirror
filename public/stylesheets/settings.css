@@ -48,8 +48,9 @@
 
 .settingsMenuItem {
     color: #FFFFFF;
-    height: 4em;
+    height: 3em;
     text-align: center;
+    /* overflow-x: scroll; */
 }
 
 .settingsMenuItem:hover {
@@ -58,9 +59,9 @@
 
 .settingsMenuItemText {
     font-family: monospace;
-    font-size: 2em;
+    font-size: 1.5em;
     display: inline-block;
-    line-height: 2em;
+    line-height: 1.5em;
 }
 
 .active {
