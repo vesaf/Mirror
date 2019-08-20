@@ -96,10 +96,6 @@ window.addEventListener("load", () => {
             opaque.appendChild(closeBtn);
             container.appendChild(opaque);
 
-            for (let i = 0; i < 12; i++) {
-                settingsCategories.push({title: "Setting" + i});
-            }
-
             // Load side menu item for each setting
             for (let i = 0; i < settingsCategories.length; i++) {
                 var activeClass = (i == 0) ? "active" : "";
