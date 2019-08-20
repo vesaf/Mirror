@@ -1,7 +1,8 @@
 
 window.addEventListener("load", function() {
     var holdDown = null;
-    var lastCoords = {x: undefined, y: undefined}
+    var lastCoords = {x: undefined, y: undefined};
+    var startCoords = {x: undefined, y: undefined};
     var activeItem;
     // On click, check if on widget, if so, set holdDown to widget container
     window.addEventListener('mousedown', function(e) {
@@ -18,6 +19,8 @@ window.addEventListener("load", function() {
                 // Set last coordinates to first click location
                 lastCoords.x = e.x;
                 lastCoords.y = e.y;
+                startCoords.x = e.x;
+                startCoords.y = e.y;
             }
             else {
                 holdDown = null;
@@ -27,6 +30,15 @@ window.addEventListener("load", function() {
     // On click release, set holdDown to null and reset last coordinates
     window.addEventListener("mouseup", function(e) {
         holdDown = null;
+        // Only open a widget if the icon hasn't moved after the mouse button has been released
+        // The event is caught from the icons.js file
+        if (lastCoords.x == startCoords.x & lastCoords.y == startCoords.y & activeItem.classList.contains("icon")) {
+            var iconClick = new Event("iconClick");
+            activeItem.dispatchEvent(iconClick);
+        }
+        if (activeItem.classList.contains("icon")){
+            activeItem.classList.remove("activeWidget");
+        }
         lastCoords.x = undefined;
         lastCoords.y = undefined;
     });
