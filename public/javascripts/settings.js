@@ -33,8 +33,6 @@ window.addEventListener("load", () => {
                 settingsScript.setAttribute("src", "settings/" + settingsCategoriesStr[i] + ".js");
                 document.head.appendChild(settingsScript);
             }
-
-
         },
         error: function () {
             alert("Kon de instellingen niet ophalen. Herstart de spiegel en probeer het opnieuw.");
@@ -97,6 +95,10 @@ window.addEventListener("load", () => {
             opaque.appendChild(settingsContent);
             opaque.appendChild(closeBtn);
             container.appendChild(opaque);
+
+            for (let i = 0; i < 12; i++) {
+                settingsCategories.push({title: "Setting" + i});
+            }
 
             // Load side menu item for each setting
             for (let i = 0; i < settingsCategories.length; i++) {

@@ -1,5 +1,5 @@
 const appConnect = {
-    title: "App Verbinding",
+    title: "App Connection",
     html: "<div id='placeHolder'></div>",
     openScript: function () {
         var typeNumber = 3;

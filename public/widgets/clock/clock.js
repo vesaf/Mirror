@@ -40,25 +40,25 @@ function startClock() {
         var day;
         switch(dayNo) {
             case 0:
-                day = "Zondag";
+                day = "Sunday";
                 break;
             case 1:
-                day = "Maandag";
+                day = "Monday";
                 break;
             case 2:
-                day = "Dinsdag";
+                day = "Tuesday";
                 break;
             case 3:
-                day = "Woensdag";
+                day = "Wednesday";
                 break;
             case 4:
-                day = "Donderdag";
+                day = "Thursday";
                 break;
             case 5:
-                day = "Vrijdag";
+                day = "Friday";
                 break;
             default:
-                day = "Zaterdag";
+                day = "Saturday";
         }
 
         document.getElementById("statusTime").innerHTML = "<span id='statusDay'>" + day + "</span><br>" 

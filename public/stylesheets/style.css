@@ -4,7 +4,7 @@ html, body {
     background-color: #000000;
     overflow: hidden;
     font-family: monospace;
-    /* font-size: 20px; */
+    font-size: 20px;
 }
 
 .container {
@@ -85,4 +85,18 @@ html, body {
     left: 10px;
     width: 10px;
     min-height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    margin-right: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-corner {
+    background: black;
 }

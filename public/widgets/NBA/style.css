@@ -21,12 +21,14 @@ h1 {
     text-align: center;
     line-height: 31px;
     margin: 5px;
+    font-size: 26px;
 }
 
 h2 {
     color: white;
     text-align: center;
     margin: 0;
+    font-size: 19px;
 }
 
 #contentContainer {
@@ -44,6 +46,7 @@ h2 {
     min-height: 19px;
     margin: auto;
     width: 54px;
+    font-size: 12px;
 }
 
 .gameContainer {

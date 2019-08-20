@@ -44,6 +44,7 @@
     height: 100%;
     min-width: 208px;
     border-right: 7px solid #FFFFFF;
+    overflow-y: scroll;
 }
 
 .settingsMenuItem {
@@ -73,6 +74,8 @@
     width: 80%;
     height: 100%;
     float: right;
+    overflow-y: auto;
+    margin-right: 2px;
 }
 
 #closeBtn {
@@ -118,4 +121,8 @@
     height: 400px;
     display: block;
     margin: 30px auto;
+}
+
+#settingsContent::-webkit-scrollbar-track-piece {
+    margin-top: 40px;
 }
