@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var exec = require('child_process').exec;
+var wifi = require('node-wifi');
+
+wifi.init({
+  iface: null
+});
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -78,11 +83,7 @@ router.get('/wifinetworks', function (req, res) {
             if (signalRegOut !== null) {
               quality = parseInt(signalRegOut[1]);
               // Convert percentage quality to dBm
-              const max = -30;
-              const min = -90;
-              var dBm = (max - min) * (quality/100) + min;
-              // Alternative quality to dBm conversion
-              // var dBm = (quality / 2) - 100;
+              percTodBm(quality);
 
               // Convert dBm to number of visible wifi bars
               if (dBm >= -50) {
@@ -119,6 +120,28 @@ router.get('/wifinetworks', function (req, res) {
     });
   }
 });
+
+// command: iwlist scan
+router.get('/wifinetworks2', function(req, res) {
+  res = setHeaders(res);
+  wifi.scan(function(err, networks) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.end(JSON.stringify(networks));
+    }
+  });
+});
+
+// Convert percentage quality to dBm
+function percTodBm(quality) {
+  const max = -30;
+  const min = -90;
+  var dBm = (max - min) * (quality/100) + min;
+  // Alternative quality to dBm conversion
+  // var dBm = (quality / 2) - 100;
+}
 
 // Helper function that sets the res object
 function setHeaders(res) {
