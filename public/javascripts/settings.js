@@ -14,7 +14,7 @@ window.addEventListener("load", () => {
     icon.style.top = coords.y + "px";
 
     container.appendChild(icon);
-    icon.addEventListener("click", openSettings);
+    icon.addEventListener("iconClick", openSettings);
     var open = false;
 
     var settingsCategoriesStr = [];

@@ -19,5 +19,6 @@ function createIcon(left, top, imageSrc, name, openWidget) {
     icon.appendChild(iconImg);
     container.appendChild(icon);
     // Listen for the icon click event dispatched from the drag.js file
+    // Settings event listener from settings.js file
     icon.addEventListener("iconClick", openWidget);
 }
