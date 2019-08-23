@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var exec = require('child_process').exec;
-var wifi = require('node-wifi');
+var wifi = require('wifi-control');
 
 wifi.init({
-  iface: null
+  debug: true
 });
 
 /* GET home page. */
@@ -124,13 +124,14 @@ router.get('/wifinetworks', function (req, res) {
 // command: iwlist scan
 router.get('/wifinetworks2', function(req, res) {
   res = setHeaders(res);
-  wifi.scan(function(err, networks) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.end(JSON.stringify(networks));
-    }
+  // fs.readFile('wifi.txt', 'utf8', function(err, data) {
+  //   if (err) throw err;
+
+  //   res.end(data);
+  // });
+  wifi.scanForWiFi(function(err, networks) {
+    if (err) console.error(err);
+    res.end(JSON.stringify(networks.networks));
   });
 });
 
