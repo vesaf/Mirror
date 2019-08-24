@@ -49,7 +49,14 @@ router.get('/wifinetworks', function (req, res) {
   }
   else if (process.platform == "linux") {
     getNetworksLin(function(connections) {
-      res.end(JSON.stringify(connections));
+      if (connections.length == 0) {
+        getNetworksLin(function(connections) {
+          res.end(JSON.stringify(connections));
+        });
+      }
+      else {
+        res.end(JSON.stringify(connections));
+      }
     });
   }
 });
@@ -144,7 +151,7 @@ function getNetworksWin(callback) {
 }
 
 function getNetworksLin(callback) {
-  exec("iwlist scan", (error, stdout, stderr) => {
+  exec("iwlist scan", (err, stdout, stderr) => {
     if (err) throw err;
     var signalReg = /Signal level=(-?\d{1,2})/g;
     // Get SSID and all text for current network
@@ -175,7 +182,7 @@ function getNetworksLin(callback) {
       dataCpy = dataCpy.substring(start);
       let end = dataCpy.indexOf("Cell ");
       if (end < 0) {
-        end = data.length;
+        end = stdout.length;
       }
       let connection = dataCpy.substring(0, end);
       if (connection.indexOf("WPA2") >= 0) {
