@@ -42,23 +42,16 @@ function getSettingJS(files) {
 router.get('/wifinetworks', function (req, res) {
   res = setHeaders(res);
   // Check if on Windows
-  if (process.platform == "win32") {
-    getNetworksWin(function(connections) {
-      res.end(JSON.stringify(connections))
-    });
-  }
-  else if (process.platform == "linux") {
+  // if (process.platform == "win32") {
+  //   getNetworksWin(function(connections) {
+  //     res.end(JSON.stringify(connections))
+  //   });
+  // }
+  // else if (process.platform == "linux") {
     getNetworksLin(function(connections) {
-      if (connections.length == 0) {
-        getNetworksLin(function(connections) {
-          res.end(JSON.stringify(connections));
-        });
-      }
-      else {
-        res.end(JSON.stringify(connections));
-      }
+      res.end(JSON.stringify(connections));
     });
-  }
+  // }
 });
 
 // Convert percentage quality to dBm
@@ -151,11 +144,12 @@ function getNetworksWin(callback) {
 }
 
 function getNetworksLin(callback) {
-  exec("iwlist scan", (err, stdout, stderr) => {
+  exec("sudo iwlist wlan0 scan", (err, stdout, stderr) => {
+  // fs.readFile("wifi2.txt", "utf8", function(err, stdout) {
     if (err) throw err;
     var signalReg = /Signal level=(-?\d{1,2})/g;
     // Get SSID and all text for current network
-    var SSIDReg = /ESSID:"(.+)"/g;
+    var SSIDReg = /ESSID:"(.*)"/g;
     // var SSIDRegOut = data.matchAll(SSIDReg);
     var connections = [];
 
