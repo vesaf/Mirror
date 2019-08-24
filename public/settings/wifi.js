@@ -131,7 +131,7 @@ var getWifiNetworks = function () {
                         + `<p class="securityType">` + connection.auth + `</p>` 
                     + `</div>` 
                     + adaptWifiIcon(wifiIcon, connection.signal)
-                    + `<p class="networkName">` + connection.SSID + `</p>
+                    + `<p class="networkName">` + (connection.SSID ? connection.SSID : "Hidden Network") + `</p>
                 </div>
                 `;
                 console.log(connection.SSID + ": " + connection.quality + " " + connection.dBm + " " + connection.auth);

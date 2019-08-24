@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var exec = require('child_process').exec;
-var wifi = require('wifi-control');
+// var wifi = require('wifi-control');
 
-wifi.init({
-  debug: true
-});
+// wifi.init({
+//   debug: true
+// });
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -40,108 +40,160 @@ function getSettingJS(files) {
 // Get list of wifi networks
 // TODO: force refresh wifi
 router.get('/wifinetworks', function (req, res) {
+  res = setHeaders(res);
   // Check if on Windows
   if (process.platform == "win32") {
-    // Request wifi networks
-    exec("netsh wlan show networks mode=Bssid", (error, stdout, stderr) => {
-      // Check and handle error
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return;
-      }
-
-      // define regex to find signal quality
-      var signalReg = /Signal \s*: (\d+)%/;
-      var authReg = /Authentication \s*: (.+)\r/;
-
-      // define regex to find number of available networks and test
-      var wifiCountReg = /There are (\d+) networks currently visible/;
-
-      var wifiCountRegOut = wifiCountReg.exec(stdout);
-      var connections = [];
-
-      // If no issue counting networks, continue
-      if (wifiCountRegOut !== null) {
-        var wifiCount = parseInt(wifiCountRegOut[1]);
-
-        // Loop through networks
-        for (let i = 0; i < wifiCount; i++) {
-          // Get SSID and all text for current network
-          var SSIDReg = new RegExp("SSID " + (i+1) + " : (.*)\\r[\\s\\S]*?\\r\\n\\r\\n");
-          var SSIDRegOut = SSIDReg.exec(stdout);
-
-          // If no issue, continue
-          if (SSIDRegOut !== null) {
-            // Get SSID from regex result
-            var SSID = SSIDRegOut[1];
-            // Run signal quality regex on network information text saved in total SSID regex match
-            var signalRegOut = signalReg.exec(SSIDRegOut[0]);
-
-            // If quality defined available get it and convert to signal strength
-            var quality = undefined;
-            var signal = undefined;
-            if (signalRegOut !== null) {
-              quality = parseInt(signalRegOut[1]);
-              // Convert percentage quality to dBm
-              percTodBm(quality);
-
-              // Convert dBm to number of visible wifi bars
-              if (dBm >= -50) {
-                signal = 3;
-              }
-              else if (dBm >= -60) {
-                signal = 2;
-              }
-              else if (dBm >= -70) {
-                signal = 1;
-              }
-              else {
-                signal = 0;
-              }
-            }
-
-            var authRegOut = authReg.exec(SSIDRegOut[0]);
-            var auth = undefined;
-            if (authRegOut !== null) {
-              auth = authRegOut[1];
-            }
-            // Add results to list of networks
-            connections.push({SSID: SSID, signal: signal, quality: quality, dBm: dBm, auth: auth})
-          }
-          else {
-            break;
-          }
-        }
-      }
-
-      // Send networks to client
-      res = setHeaders(res);
+    getNetworksWin(function(connections) {
+      res.end(JSON.stringify(connections))
+    });
+  }
+  else if (process.platform == "linux") {
+    getNetworksLin(function(connections) {
       res.end(JSON.stringify(connections));
     });
   }
-});
-
-// command: iwlist scan
-router.get('/wifinetworks2', function(req, res) {
-  res = setHeaders(res);
-  // fs.readFile('wifi.txt', 'utf8', function(err, data) {
-  //   if (err) throw err;
-
-  //   res.end(data);
-  // });
-  wifi.scanForWiFi(function(err, networks) {
-    if (err) console.error(err);
-    res.end(JSON.stringify(networks.networks));
-  });
 });
 
 // Convert percentage quality to dBm
 function percTodBm(quality) {
   const max = -30;
   const min = -90;
-  var dBm = (max - min) * (quality/100) + min;
+  return (max - min) * (quality/100) + min;
   // Alternative quality to dBm conversion
   // var dBm = (quality / 2) - 100;
+}
+
+function dBmToSignal(dBm) {
+  // Convert dBm to number of visible wifi bars
+  dBm = parseInt(dBm);
+  if (dBm >= -50) {
+    return 3;
+  }
+  else if (dBm >= -60) {
+    return 2;
+  }
+  else if (dBm >= -70) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+function getNetworksWin(callback) {
+  // Request wifi networks
+  exec("netsh wlan show networks mode=Bssid", (error, stdout, stderr) => {
+    // Check and handle error
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+
+    // define regex to find signal quality
+    var signalReg = /Signal \s*: (\d+)%/;
+    var authReg = /Authentication \s*: (.+)\r/;
+
+    // define regex to find number of available networks and test
+    var wifiCountReg = /There are (\d+) networks currently visible/;
+
+    var wifiCountRegOut = wifiCountReg.exec(stdout);
+    var connections = [];
+
+    // If no issue counting networks, continue
+    if (wifiCountRegOut !== null) {
+      var wifiCount = parseInt(wifiCountRegOut[1]);
+
+      // Loop through networks
+      for (let i = 0; i < wifiCount; i++) {
+        // Get SSID and all text for current network
+        var SSIDReg = new RegExp("SSID " + (i+1) + " : (.*)\\r[\\s\\S]*?\\r\\n\\r\\n");
+        var SSIDRegOut = SSIDReg.exec(stdout);
+
+        // If no issue, continue
+        if (SSIDRegOut !== null) {
+          // Get SSID from regex result
+          var SSID = SSIDRegOut[1];
+          // Run signal quality regex on network information text saved in total SSID regex match
+          var signalRegOut = signalReg.exec(SSIDRegOut[0]);
+
+          // If quality defined available get it and convert to signal strength
+          var quality = undefined;
+          var signal = undefined;
+          if (signalRegOut !== null) {
+            quality = parseInt(signalRegOut[1]);
+            // Convert percentage quality to dBm
+            var dBm = percTodBm(quality);
+            var signal = dBmToSignal(dBm);
+          }
+
+          var authRegOut = authReg.exec(SSIDRegOut[0]);
+          var auth = undefined;
+          if (authRegOut !== null) {
+            auth = authRegOut[1];
+          }
+          // Add results to list of networks
+          connections.push({SSID: SSID, signal: signal, quality: quality, dBm: dBm, auth: auth})
+        }
+        else {
+          break;
+        }
+      }
+    }
+    callback(connections);
+  });
+}
+
+function getNetworksLin(callback) {
+  exec("iwlist scan", (error, stdout, stderr) => {
+    if (err) throw err;
+    var signalReg = /Signal level=(-?\d{1,2})/g;
+    // Get SSID and all text for current network
+    var SSIDReg = /ESSID:"(.+)"/g;
+    // var SSIDRegOut = data.matchAll(SSIDReg);
+    var connections = [];
+
+    // Set SSID
+    var regExOut;
+    while ((regExOut = SSIDReg.exec(stdout)) !== null) {
+      connections.push({SSID: regExOut[1]});
+    }
+
+    // set signal
+    var i = 0;
+    while ((regExOut = signalReg.exec(stdout)) !== null) {
+      connections[i].dBm = regExOut[1];
+      connections[i].signal = dBmToSignal(regExOut[1]);
+      i++;
+    }
+
+    // Set authentication method
+    var dataCpy = stdout;
+    var start;
+    i = 0;
+    while ((start = dataCpy.indexOf("Cell ")) >= 0) {
+      start += "Cell ".length;
+      dataCpy = dataCpy.substring(start);
+      let end = dataCpy.indexOf("Cell ");
+      if (end < 0) {
+        end = data.length;
+      }
+      let connection = dataCpy.substring(0, end);
+      if (connection.indexOf("WPA2") >= 0) {
+        connections[i].auth = "WPA2";
+      }
+      else if (connection.indexOf("WPA") >= 0) {
+        connections[i].auth = "WPA";
+      }
+      else if (connection.indexOf("WEP") >= 0) {
+        connections[i].auth = "WEP";
+      }
+      else {
+        connections[i].auth = "Open";
+      }
+      i++;
+    }
+    callback(connections);
+  });
 }
 
 // Helper function that sets the res object
