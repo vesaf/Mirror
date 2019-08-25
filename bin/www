@@ -34,7 +34,7 @@ server.listen(8080, IPv4, function () {
         fs.writeFile("/Documents/error.txt", error);
       }
       else {
-        fs.writeFile("/Documents/error.txt". stdout);
+        fs.writeFile("/Documents/error.txt", stdout);
       }
       console.log(stdout) 
     }
