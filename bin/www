@@ -9,6 +9,7 @@ var debug = require('debug')('node:server');
 var http = require('http');
 var ip = require('ip');
 var exec = require('child_process').exec;
+var fs = require('fs');
 
 // Extract command line arguments
 if (process.argv[2] == "dev") {
@@ -28,7 +29,15 @@ console.log("Port:", IPv4 + ":8080");
 server.listen(8080, IPv4, function () {
   // Open browser when on linux
   if (process.platform === "linux" && !development) {
-    function puts(error, stdout, stderr) { console.log(stdout) }
+    function puts(error, stdout, stderr) { 
+      if (error) {
+        fs.writeFile("/Documents/error.txt", error);
+      }
+      else {
+        fs.writeFile("/Documents/error.txt". stdout);
+      }
+      console.log(stdout) 
+    }
     exec("chromium-browser --kiosk http://" + IPv4 + ":8080", puts);
   }
 });
