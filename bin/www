@@ -31,10 +31,10 @@ server.listen(8080, IPv4, function () {
   if (process.platform === "linux" && !development) {
     function puts(error, stdout, stderr) { 
       if (error) {
-        fs.writeFile("/Documents/error.txt", error);
+        fs.writeFile("home/pi/Documents/error.txt", error, function() {});
       }
       else {
-        fs.writeFile("/Documents/error.txt", stdout);
+        fs.writeFile("home/pi/Documents/error.txt", stdout, function () {});
       }
       console.log(stdout) 
     }
