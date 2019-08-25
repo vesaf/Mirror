@@ -42,16 +42,16 @@ function getSettingJS(files) {
 router.get('/wifinetworks', function (req, res) {
   res = setHeaders(res);
   // Check if on Windows
-  // if (process.platform == "win32") {
-  //   getNetworksWin(function(connections) {
-  //     res.end(JSON.stringify(connections))
-  //   });
-  // }
-  // else if (process.platform == "linux") {
+  if (process.platform == "win32") {
+    getNetworksWin(function(connections) {
+      res.end(JSON.stringify(connections))
+    });
+  }
+  else if (process.platform == "linux") {
     getNetworksLin(function(connections) {
       res.end(JSON.stringify(connections));
     });
-  // }
+  }
 });
 
 // Convert percentage quality to dBm
