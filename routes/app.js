@@ -14,11 +14,15 @@ router.get('/ping', function (req, res) {
 router.get('/widgetnames', function (req, res) {
   fs.readdir("./public/widgets", function (err, files) {
     if (err) console.error(err);
-    
     // Don't send widgets in __dev__ folder
     if (files.indexOf("__dev__") >= 0) {
       files.splice(files.indexOf("__dev__"), 1);
     }
+    // Don't send settings.json file
+    if (files.indexOf("settings.json") >= 0) {
+      files.splice(files.indexOf("settings.json"), 1);
+    }
+        
     res = setHeaders(res);
     res.end(files.toString());
   });
@@ -84,6 +88,7 @@ router.post('/status', function (req, res) {
       // Open widget
       case 1:
         lastWidget = status.options.widget;
+        console.log(lastWidget);
         break;
       // Close widget
       case 2:

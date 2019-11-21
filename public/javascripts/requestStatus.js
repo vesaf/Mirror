@@ -31,7 +31,7 @@ function functionCalls(id, options) {
     switch (id) {
         case 1:
             if (options.widget && document.getElementById(options.widget)) {
-                document.getElementById(options.widget).click();
+                triggerEvent(document.getElementById(options.widget), "iconClick");
                 setLastAppWidget(options.widget);
                 // console.log(document.getElementsByClassName("activeWidget"));
                 // if (document.getElementsByClassName("activeWidget").length > 0){
@@ -69,3 +69,18 @@ function functionCalls(id, options) {
             console.log(options);
     }
 }
+
+// Helper function to trigger event
+function triggerEvent(el, type){
+    if ('createEvent' in document) {
+         // modern browsers, IE9+
+         var e = document.createEvent('HTMLEvents');
+         e.initEvent(type, false, true);
+         el.dispatchEvent(e);
+     } else {
+         // IE 8
+         var e = document.createEventObject();
+         e.eventType = type;
+         el.fireEvent('on'+e.eventType, e);
+     }
+ }
