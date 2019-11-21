@@ -4,12 +4,22 @@ window.addEventListener("load", function() {
         url: window.location + "app/widgetnames",
         success: function (widgets) {
             widgets = widgets.split(",");
-            // Load js for each settings category
-            for (let i = 0; i < widgets.length; i++) {
-                let widgetsScript = document.createElement("script");
-                widgetsScript.setAttribute("src", "widgets/" + widgets[i] + "/" + widgets[i] + ".js");
-                document.head.appendChild(widgetsScript);
-            }
+            $.ajax({
+                url: window.location + "widgets/toggle",
+                success: function (widgetStatuses) {
+                    // Load js for each set,tings category
+                    for (let i = 0; i < widgets.length; i++) {
+                        if (widgetStatuses[widgets[i]] !== false) {
+                            let widgetsScript = document.createElement("script");
+                            widgetsScript.setAttribute("src", "widgets/" + widgets[i] + "/" + widgets[i] + ".js");
+                            document.head.appendChild(widgetsScript);
+                        }
+                    }
+                },
+                error: function() {
+                    alert("Kon de widgets niet ophalen. Sluit de app, herstart de spiegel en probeer het opnieuw.");
+                }
+            });
         },
         error: function () {
             alert("Kon de widgets niet ophalen. Sluit de app, herstart de spiegel en probeer het opnieuw.");

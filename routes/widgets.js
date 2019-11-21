@@ -43,7 +43,6 @@ router.post('/toggle', function (req, res) {
             else {
                 settingsObj[widget] = false;
             }
-            console.log(settingsObj);
             fs.writeFile("./public/widgets/settings.json", JSON.stringify(settingsObj), function(err) {
                 if (err) {
                     console.error(err);

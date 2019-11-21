@@ -1,6 +1,6 @@
 const toggleWidgets = {
     title: "Widgets",
-    html: "<div id=widgetListContainer></div>",
+    html: "<div id=widgetListContainer></div><div id=footerContainer><button id=applyWidgetToggleBtn>Show Changes</button></div>",
     css: true,
     openScript: function () {
         // Send Ajax request to server for widget names
@@ -42,6 +42,9 @@ const toggleWidgets = {
             }
         });
 
+        document.getElementById("applyWidgetToggleBtn").addEventListener("click", function() {
+            location.reload();
+        });
     },
     prepareScript: function () {
         // Click event when clicking checkbox

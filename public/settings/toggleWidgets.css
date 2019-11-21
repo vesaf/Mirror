@@ -72,3 +72,24 @@ input:checked + .slider:before {
   display: inline-block;
   margin: 0;
 }
+
+#footerContainer {
+  bottom: 10px;
+    right: 30px;
+    display: block;
+    position: absolute;
+}
+
+#applyWidgetToggleBtn {
+  width: 210px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: white;
+  border: 0px;
+  font-size: 30px;
+  font-family: monospace;
+}
+
+#applyWidgetToggleBtn:hover {
+  cursor: pointer;
+}
