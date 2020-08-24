@@ -153,7 +153,7 @@ window.addEventListener("load", () => {
         setTimeout(function () {
             container.removeChild(opaque);
             open = false;
-        }, 490);
+        }, 350);
     }
 
 });

@@ -81,8 +81,8 @@ input:checked + .slider:before {
 }
 
 #applyWidgetToggleBtn {
-  width: 210px;
-  height: 45px;
+  width: 240px;
+  height: 55px;
   border-radius: 10px;
   background-color: white;
   border: 0px;

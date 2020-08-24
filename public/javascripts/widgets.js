@@ -7,7 +7,7 @@ window.addEventListener("load", function() {
             $.ajax({
                 url: window.location + "widgets/toggle",
                 success: function (widgetStatuses) {
-                    // Load js for each set,tings category
+                    // Load js for each settings category
                     for (let i = 0; i < widgets.length; i++) {
                         if (widgetStatuses[widgets[i]] !== false) {
                             let widgetsScript = document.createElement("script");
