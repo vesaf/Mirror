@@ -109,7 +109,7 @@ router.get('/nba', function (req, res) {
   var today = new Date();
   
   // Get season data, new season assumed to start in July
-  const season = (today.getMonth() >= 6) ? today.getFullYear() : today.getFullYear() - 1;
+  const season = (today.getMonth() >= 6 && !(today.getFullYear() == 2020 && today.getMonth() < 10)) ? today.getFullYear() : today.getFullYear() - 1;
   request("http://data.nba.com/prod/v1/" + season + "/schedule.json", function(error, response, body) {
     // Setup relevant schedule object
     var relevantSchedule = {
