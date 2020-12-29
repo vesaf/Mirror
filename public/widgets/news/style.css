@@ -1,4 +1,4 @@
-#NBAContainer {
+#newsContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -8,7 +8,7 @@
     overflow: hidden;
 }
 
-#dayHeader {
+#sourceHeader {
     padding: 5px 0;
     margin: 0 !important;
     width: 100%;
@@ -16,7 +16,7 @@
     min-height: 31px;
 }
 
-.gameContainer h1, #dayHeader {
+.headlineContainer h1, #sourceHeader {
     color: white;
     text-align: center;
     line-height: 31px;
@@ -24,35 +24,28 @@
     font-size: 26px;
 }
 
-.gameContainer h2 {
-    color: white;
-    text-align: center;
-    margin: 0;
-    font-size: 19px;
-}
-
-#gameListContainer {
+#headlineListContainer {
     height: 340px;
     overflow-y: auto;
     background-color: black;
     border-bottom: 2px solid white;
 }
 
-#gameListContainer::-webkit-scrollbar{
+#headlineListContainer::-webkit-scrollbar{
     display: none;
 }
 
-#gamePageIndicatorContainer {
+#newsPageIndicatorContainer {
     min-height: 19px;
     margin: auto;
     width: 54px;
     font-size: 12px;
 }
 
-.gameContainer {
+.headlineContainer {
     position: relative;
     left: 260px;
-    height: 85px;
+    /* height: 85px; */
     border: 2px solid white;
     margin: 0 -2px;
     transition: left 0.5s ease-in;

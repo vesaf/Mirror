@@ -1,8 +1,8 @@
 var css = '<link rel="stylesheet" type="text/css" href="widgets/NBA/style.css">';
 var html = `<div id="NBAContainer">
     <h1 id="dayHeader"></h1>
-    <div id="contentContainer"></div>
-    <div id="pageIndicatorContainer"></div>
+    <div id="gameListContainer"></div>
+    <div id="gamePageIndicatorContainer"></div>
 </div>`;
 initializeWidget("NBA", html, css, initializeNBA, closeNBA);
 
@@ -43,10 +43,10 @@ function closeNBA() {
 function showGames(schedule, day, rotation) {
     // Set the day header
     document.getElementById("dayHeader").innerHTML = day.charAt(0).toUpperCase() + day.slice(1);
-    // Get the contentContainer and clear it
-    var contentContainer = document.getElementById("contentContainer");
-    contentContainer.innerHTML = "";
-    contentContainer.scrollTop = 0;
+    // Get the gameListContainer and clear it
+    var gameListContainer = document.getElementById("gameListContainer");
+    gameListContainer.innerHTML = "";
+    gameListContainer.scrollTop = 0;
     
     // Loop through the games
     var gameNo = (schedule[day]) ? schedule[day].length : 0;
@@ -55,7 +55,7 @@ function showGames(schedule, day, rotation) {
         const headers = generateHeaders(schedule[day][i]);
         
         // Generate div
-        contentContainer.innerHTML += `<div class='gameContainer'>
+        gameListContainer.innerHTML += `<div class='gameContainer'>
             <h1>` + headers["gameHeader"] + `</h1>
             <h2>` + headers["subHeaderText"] + `</h2>
             </div>`;
@@ -63,16 +63,16 @@ function showGames(schedule, day, rotation) {
 
     // Display message if there are no games that day
     if (gameNo == 0) {
-        contentContainer.innerHTML += `<div class='gameContainer'>
+        gameListContainer.innerHTML += `<div class='gameContainer'>
         <h1> No games today </h1>
         </div>`;
     }
 
     // Adds fake game containers for testing purposes
-    gameNo = insertFakeGames(0, gameNo, contentContainer);
+    gameNo = insertFakeGames(0, gameNo, gameListContainer);
 
     // Add page indicators
-    document.getElementById("pageIndicatorContainer").innerHTML = `
+    document.getElementById("gamePageIndicatorContainer").innerHTML = `
     <div id="dot1" class="dot open"></div> <div id="dot2" class="dot open"></div> <div id="dot3" class="dot open"></div>
     `;
 
@@ -105,17 +105,17 @@ function showGames(schedule, day, rotation) {
 
 // Scroll down if there are too many games to show in one screen
 function scroll(gameNo, callback) {
-    var contentContainer = document.getElementById("contentContainer");
-    const contentContainerHeight = contentContainer.offsetHeight;
+    var gameListContainer = document.getElementById("gameListContainer");
+    const gameListContainerHeight = gameListContainer.offsetHeight;
     var representativeGameContainer = document.getElementsByClassName("gameContainer")[0];
     const gameContainerHeight = representativeGameContainer.clientHeight;
     const totalGameHeight = (gameNo == 0) ? gameContainerHeight : gameNo * gameContainerHeight;
 
-    if (totalGameHeight > contentContainerHeight) {
+    if (totalGameHeight > gameListContainerHeight) {
         //elapsed
         var elapsed;
         //duration in milli seconds
-        var duration = 1000 * (gameNo - contentContainerHeight/gameContainerHeight);
+        var duration = 1000 * (gameNo - gameListContainerHeight/gameContainerHeight);
         //start time, when the animation starts
         var startTime = (new Date()).getTime(); //start time
         //the magic
@@ -125,7 +125,7 @@ function scroll(gameNo, callback) {
             //check if elapse time is less than duration
             if (elapsed < duration) {
                 //animate using an easing equation
-                contentContainer.scrollTop = ease(elapsed, gameNo * gameContainerHeight, duration);
+                gameListContainer.scrollTop = ease(elapsed, gameNo * gameContainerHeight, duration);
             } else {
                 //animation is complete, stop interval timer
                 clearInterval(scrollInterval);
@@ -148,9 +148,9 @@ function scroll(gameNo, callback) {
 }
 
 // Adds fake game containers for testing purposes
-function insertFakeGames(fakeGameNo, realGameNo, contentContainer) {
+function insertFakeGames(fakeGameNo, realGameNo, gameListContainer) {
     for (let i = 0; i < fakeGameNo; i++) {
-        contentContainer.innerHTML += `<div class='gameContainer'>
+        gameListContainer.innerHTML += `<div class='gameContainer'>
         <h1> No games today </h1>
         </div>`;
     }
