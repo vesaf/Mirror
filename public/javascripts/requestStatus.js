@@ -30,8 +30,10 @@ window.addEventListener("beforeunload", function () {
 function functionCalls(id, options) {
     switch (id) {
         case 1:
-            if (options.widget && document.getElementById(options.widget)) {
-                triggerEvent(document.getElementById(options.widget), "iconClick");
+            if (options.widget) {
+                // triggerEvent(document.getElementById(options.widget), "iconClick");
+                console.log(options.widget);
+                window.dispatchEvent(new CustomEvent("openWidget", {detail:{calledName: options.widget}}));
                 setLastAppWidget(options.widget);
                 // console.log(document.getElementsByClassName("activeWidget"));
                 // if (document.getElementsByClassName("activeWidget").length > 0){

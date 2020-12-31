@@ -1,6 +1,10 @@
 const toggleWidgets = {
     title: "Widgets",
-    html: "<div id=widgetListContainer></div><div id=footerContainer><button id=applyWidgetToggleBtn>Show Changes</button></div>",
+    html: ` <div id=widgetListContainer>
+            </div>
+            <div id=footerContainer>
+                <button class=widgetSettingsBtn id=applyWidgetToggleBtn>Show Changes</button>
+            </div>`,
     css: true,
     openScript: function () {
         // Send Ajax request to server for widget names

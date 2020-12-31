@@ -172,19 +172,22 @@ router.get('/nba', function (req, res) {
 
 // Send all nu.nl news headlines to the app
 router.get('/news', function (req, res) {
-  getRSSNews("https://www.nu.nl/rss/Algemeen", function(articlesNu) {
+  getRSSNews("http://feeds.nos.nl/nosnieuwsalgemeen", function(articlesNOS) {
     // Setup news object
     var news = {
-      "nu.nl": articlesNu.slice(0, 10)
+      "NOS": articlesNOS.slice(0, 10)
     };
-    getRSSNews("http://feeds.bbci.co.uk/news/rss.xml", function(articlesBBC) {
-      news["BBC"] = articlesBBC.slice(0, 10);
-
-      getRSSNews("http://www.tagesschau.de/xml/rss2/", function(articlesTagesschau) {
-        news["Tagesschau"] = articlesTagesschau.slice(0, 10);
-        // Send data
-        res.write(JSON.stringify(news));
-        res.end();
+    getRSSNews("https://www.nu.nl/rss/Algemeen", function(articlesNu) {
+      news["nu.nl"] = articlesNu.slice(0, 10);
+      getRSSNews("http://feeds.bbci.co.uk/news/rss.xml", function(articlesBBC) {
+        news["BBC"] = articlesBBC.slice(0, 10);
+  
+        getRSSNews("http://www.tagesschau.de/xml/rss2/", function(articlesTagesschau) {
+          news["Tagesschau"] = articlesTagesschau.slice(0, 10);
+          // Send data
+          res.write(JSON.stringify(news));
+          res.end();
+        });
       });
     });
   });

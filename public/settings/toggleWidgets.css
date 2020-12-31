@@ -80,7 +80,7 @@ input:checked + .slider:before {
     position: absolute;
 }
 
-#applyWidgetToggleBtn {
+.widgetSettingsBtn {
   width: 240px;
   height: 55px;
   border-radius: 10px;
@@ -90,6 +90,6 @@ input:checked + .slider:before {
   font-family: monospace;
 }
 
-#applyWidgetToggleBtn:hover {
+.widgetSettingsBtn:hover {
   cursor: pointer;
 }
