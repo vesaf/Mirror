@@ -193,6 +193,6 @@
             else {
                 showHeadlines(news, sourceCounter, rotation);
             }
-        }, 601);
+        }, 600);
     }
 }());
