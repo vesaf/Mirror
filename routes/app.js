@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var request = require("request");
+var xmlParser = require("fast-xml-parser");
+const { head } = require('request');
 
 // Allow app to check if ip works
 router.get('/ping', function (req, res) {
@@ -14,11 +16,15 @@ router.get('/ping', function (req, res) {
 router.get('/widgetnames', function (req, res) {
   fs.readdir("./public/widgets", function (err, files) {
     if (err) console.error(err);
-    
     // Don't send widgets in __dev__ folder
     if (files.indexOf("__dev__") >= 0) {
       files.splice(files.indexOf("__dev__"), 1);
     }
+    // Don't send settings.json file
+    if (files.indexOf("settings.json") >= 0) {
+      files.splice(files.indexOf("settings.json"), 1);
+    }
+        
     res = setHeaders(res);
     res.end(files.toString());
   });
@@ -84,6 +90,7 @@ router.post('/status', function (req, res) {
       // Open widget
       case 1:
         lastWidget = status.options.widget;
+        console.log(lastWidget);
         break;
       // Close widget
       case 2:
@@ -162,6 +169,51 @@ router.get('/nba', function (req, res) {
     res.end();
   });
 });
+
+// Send all nu.nl news headlines to the app
+router.get('/news', function (req, res) {
+  getRSSNews("http://feeds.nos.nl/nosnieuwsalgemeen", function(articlesNOS) {
+    // Setup news object
+    var news = {
+      "NOS": articlesNOS.slice(0, 10)
+    };
+    getRSSNews("https://www.nu.nl/rss/Algemeen", function(articlesNu) {
+      news["nu.nl"] = articlesNu.slice(0, 10);
+      getRSSNews("http://feeds.bbci.co.uk/news/rss.xml", function(articlesBBC) {
+        news["BBC"] = articlesBBC.slice(0, 10);
+  
+        getRSSNews("http://www.tagesschau.de/xml/rss2/", function(articlesTagesschau) {
+          news["Tagesschau"] = articlesTagesschau.slice(0, 10);
+          // Send data
+          res.write(JSON.stringify(news));
+          res.end();
+        });
+      });
+    });
+  });
+});
+
+// Get news headlines from RSS feed
+function getRSSNews(link, callback) {
+  request(link, function(error, response, body) {
+    // Setup headlines list
+    var articles = [];
+
+    // if there are data (i.e. the requested page exists/there is an internet connection)
+    if (!error) {
+      var articleJson = xmlParser.parse(body)["rss"]["channel"]["item"];
+      for (let i = 0; i < articleJson.length; i++) {
+        if (/ \| /.test(articleJson[i]["title"]) == false) {
+          articles.push(articleJson[i]["title"]);
+        }
+      }
+    }
+    else {
+      console.error(error);
+    }
+    callback(articles);
+  });
+}
 
 // Helper function that sets the res object
 function setHeaders(res) {

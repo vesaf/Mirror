@@ -7,7 +7,7 @@ var html = `<div class="pie">
     <div class="clip2">
         <div class="slice2"></div>
     </div>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Space Mono">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Space%20Mono">
     <div class="status">
         
         <p id="statusTime"></p>

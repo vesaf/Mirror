@@ -4,6 +4,7 @@ window.addEventListener("load", function() {
         url: window.location + "app/widgetnames",
         success: function (widgets) {
             widgets = widgets.split(",");
+
             // Load js for each settings category
             for (let i = 0; i < widgets.length; i++) {
                 let widgetsScript = document.createElement("script");
@@ -118,14 +119,35 @@ var iconY = 90;
 var initializedWidgets = {};
 function initializeWidget(name, content, css, callback, removeAction = undefined) {
     initializedWidgets[name] = {open: false};
-    createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", name, function () {
-        if (initializedWidgets[name].open == false) {
-            createWidget(name, iconX, iconY, content, css, callback, removeAction);
-            initializedWidgets[name].open = true;
+    window.addEventListener("openWidget", function(e) {
+        if(e.detail.calledName == name) {
+            console.log(e.detail);
+            if (initializedWidgets[name].open == false) {
+                createWidget(name, 0, 0, content, css, callback, removeAction);
+                initializedWidgets[name].open = true;
+            }
         }
-        
     });
-    iconY += 60;
+    $.ajax({
+        url: window.location + "widgets/toggle",
+        success: function (widgetStatuses) {
+            console.log(widgetStatuses);
+            if (widgetStatuses[name] !== false) {
+                createIcon(iconX, iconY, "widgets/" + name + "/" + name + ".png", name, function () {
+                    if (initializedWidgets[name].open == false) {
+                        createWidget(name, iconX, iconY, content, css, callback, removeAction);
+                        initializedWidgets[name].open = true;
+                    }
+                    
+                });
+                iconY += 60;
+            }
+        },
+        error: function() {
+            alert("Kon de widgets niet ophalen. Sluit de app, herstart de spiegel en probeer het opnieuw.");
+        }
+    });
+
 }
 
 function getNextIconXY() {

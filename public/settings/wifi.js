@@ -123,6 +123,10 @@ var getWifiNetworks = function () {
                     var lockIcon = closedLockIcon;
                 }
 
+                if (connection.SSID == "") {
+                    connection.SSID = "Hidden Network"
+                } 
+
                 // Add html to container with correct wifi icon
                 networkListContainer.innerHTML += `
                 <div class="networkContainer">
