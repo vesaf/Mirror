@@ -32,7 +32,6 @@ function functionCalls(id, options) {
         case 1:
             if (options.widget) {
                 // triggerEvent(document.getElementById(options.widget), "iconClick");
-                console.log(options.widget);
                 window.dispatchEvent(new CustomEvent("openWidget", {detail:{calledName: options.widget}}));
                 setLastAppWidget(options.widget);
                 // console.log(document.getElementsByClassName("activeWidget"));
