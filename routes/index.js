@@ -13,6 +13,11 @@ router.get('/', function (req, res) {
   res.sendFile('./public/index.html');
 });
 
+/* GET home page. */
+router.get('/app', function (req, res) {
+  res.sendFile('../public/index.html', {root: __dirname});
+});
+
 // Send widget names to app
 router.get('/settingnames', function (req, res) {
   fs.readdir("./public/settings", function (err, files) {
