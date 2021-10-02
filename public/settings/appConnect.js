@@ -5,7 +5,7 @@ const appConnect = {
         var typeNumber = 3;
         var errorCorrectionLevel = 'L';
         var qr = qrcode(typeNumber, errorCorrectionLevel);
-        qr.addData("http://" + window.location.host);
+        qr.addData("http://" + window.location.host + "/app/app.html");
         qr.make();
         document.getElementById("placeHolder").innerHTML = qr.createSvgTag();
     },
