@@ -4,6 +4,7 @@ var fs = require('fs');
 var request = require("request");
 var xmlParser = require("fast-xml-parser");
 const { head } = require('request');
+const { exec } = require('child_process');
 
 // Allow app to check if ip works
 router.get('/ping', function (req, res) {
@@ -81,6 +82,7 @@ router.get('/status', function (req, res) {
 
 // Set current status
 var lastWidget;
+var screenStatus = true;
 router.post('/status', function (req, res) {
   var data = JSON.parse(Object.keys(req.body)[0]);
   if (data) {
@@ -101,7 +103,39 @@ router.post('/status', function (req, res) {
         break;
       // Stopped moving widget in app
       case 4:
-        break
+        break;
+      // Toggle screen
+      case 5:
+        if (process.platform == "linux") {
+          if (screenStatus) {
+            exec("sleep 1; xset dpms force off", (error, stdout, stderr) => {
+              // Check and handle error
+              if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+              }
+              else {
+                screenStatus = false;
+              }
+            });
+          }
+          else {
+            exec("sleep 1; xset dpms force on", (error, stdout, stderr) => {
+              // Check and handle error
+              if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+              }
+              else {
+                screenStatus = true;
+              }
+            });
+          }
+        }
+        else {
+          console.log("Toggle screen not implemented on Windows and Mac");
+        }
+        break;
       default:
         console.error("Unknown status");
     }
