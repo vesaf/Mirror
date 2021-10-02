@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check if page loaded in proper context
     const widgetName = window.localStorage.widget;
     const localStorage = window.localStorage;
-    const ip = "http://192.168.1.115:8080";
+    const ip = window.location.href.replace("/app/control.html", "");
     const location = window.location.href;
     console.log(widgetName);
     console.log(ip);
@@ -53,12 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
             dragAreaDims.border = parseInt(getComputedStyle(dragArea, null).getPropertyValue('border-width').slice(0, -2));
 
             // Set drag area dimensions in CSS
+            console.log(dragArea);
             dragArea.style.width = dragAreaDims.width + "px";
             dragArea.style.height = dragAreaDims.height + "px";
             dragArea.style.top = appDims.height / 2 - dragAreaDims.height / 2 + "px";
-            
+
             // Start widget location check loop
-            getWidgetLocation(ip, dragArea, widgetName, dragAreaDims, mirrorDims);
+            getWidgetLocation(ip, widgetName, dragArea, dragAreaDims, mirrorDims);
         }
         catch (err) {
             dragArea.style.visibility = "hidden";
@@ -77,7 +78,9 @@ function getWidgetLocation(ip, widgetName, dragArea, dragAreaDims, mirrorDims) {
     dragArea.innerHTML += "<i id='locationIndicator' class='fas fa-circle'></i>";
 
     const locationIndicator = document.getElementById("locationIndicator");
+    console.log(locationIndicator);
     locationIndicator.style.transition = "all 0.4s";
+    console.log("testpost");
     const locationInfo = {
         ip: ip,
         locationIndicator: locationIndicator,

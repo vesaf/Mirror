@@ -1,6 +1,6 @@
 // Handles page load event
 document.addEventListener("DOMContentLoaded", function () {
-    const ip = "http://192.168.1.115:8080";
+    const ip = window.location.href.replace("/app/app.html", "");
     if (ip) {
         getScreendims(ip, function (dimObj) {
             window.localStorage.mirrorDims = JSON.stringify(dimObj);
