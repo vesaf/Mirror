@@ -16,5 +16,5 @@ const appConnect = {
     }
 }
 
-var event = new CustomEvent('settingReady', {detail: "appConnect"});
-window.dispatchEvent(event);
+var settingReadyEvent = new CustomEvent('settingReady', {detail: "appConnect"});
+window.dispatchEvent(settingReadyEvent);

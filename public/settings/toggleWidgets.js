@@ -2,7 +2,7 @@ const toggleWidgets = {
     title: "Widgets",
     html: ` <div id=widgetListContainer>
             </div>
-            <div id=footerContainer>
+            <div class=footerContainer>
                 <button class=widgetSettingsBtn id=applyWidgetToggleBtn>Show Changes</button>
             </div>`,
     css: true,
@@ -70,5 +70,5 @@ const toggleWidgets = {
     }
 };
 
-var event = new CustomEvent('settingReady', {detail: "toggleWidgets"});
-window.dispatchEvent(event);
+var settingReadyEvent = new CustomEvent('settingReady', {detail: "toggleWidgets"});
+window.dispatchEvent(settingReadyEvent);

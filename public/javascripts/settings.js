@@ -1,4 +1,4 @@
-var target
+var target;
 window.addEventListener("load", () => {
     // Get coordinates for next icon
     var coords = getNextIconXY();

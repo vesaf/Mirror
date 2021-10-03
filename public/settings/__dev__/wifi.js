@@ -160,5 +160,5 @@ const wifi = {
 
 
 
-var event = new CustomEvent('settingReady', {detail: "wifi"});
-window.dispatchEvent(event);
+var settingReadyEvent = new CustomEvent('settingReady', {detail: "wifi"});
+window.dispatchEvent(settingReadyEvent);
