@@ -108,7 +108,7 @@ router.post('/status', function (req, res) {
       case 5:
         if (process.platform == "linux") {
           if (screenStatus) {
-            exec("sleep 1; xset dpms force off", (error, stdout, stderr) => {
+            exec("tvservice -o", (error, stdout, stderr) => {
               // Check and handle error
               if (error) {
                 console.error(`exec error: ${error}`);
@@ -120,7 +120,7 @@ router.post('/status', function (req, res) {
             });
           }
           else {
-            exec("sleep 1; xset dpms force on", (error, stdout, stderr) => {
+            exec("tvservice -p; fbset -depth 8; fbset -depth 32; xrefresh", (error, stdout, stderr) => {
               // Check and handle error
               if (error) {
                 console.error(`exec error: ${error}`);
