@@ -3,6 +3,122 @@
   margin-left: 20px;
 }
 
+.timerContainer {
+  width: 100%;
+  /* background-color: #ff0000; */
+  height: 110px;
+}
+
+.timeBtnContainer {
+  /* background-color: green; */
+  width:  80%;
+  height: 30px;
+  position: relative;
+}
+
+.arrowUp {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 14px solid transparent;
+  margin: 0px;
+  position: absolute;
+  top: 13px;
+  cursor: pointer;
+}
+
+.timerContainer:hover .arrowUp {
+  border-bottom: 14px solid white;
+}
+
+.arrowDown {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid transparent;
+  margin: 0px;
+  position: absolute;
+  top: 5px;
+  cursor: pointer;
+}
+
+.timerContainer:hover .arrowDown  {
+  border-top: 14px solid white;
+}
+
+.decHourOnBtn {
+  left: 97px;
+}
+
+.unitHourOnBtn {
+  left: 124px;
+}
+
+.decMinuteOnBtn {
+  left: 179px;
+}
+
+.unitMinuteOnBtn {
+  left: 206px;
+}
+
+.decHourOffBtn {
+  left: 405px;
+}
+
+.unitHourOffBtn {
+  left: 432px;
+}
+
+.decMinuteOffBtn {
+  left: 487px;
+}
+
+.unitMinuteOffBtn {
+  left: 514px;
+}
+
+.timeLabelContainer {
+  /* background-color: blue; */
+  width: 100%;
+  height: 40px;
+  position: relative;
+}
+
+.timeLabel {
+  font-size: 2.5em;
+  margin: 0 10px;
+  line-height: 40px;
+  color: #ffffff;
+  display: inline-block;
+}
+
+.timeOffLabel {
+  margin-left: 40px;
+}
+
+.deleteTimerBtn {
+  color:  white;
+  height: 35px;
+  width: 35px;
+  border: 2px solid white;
+  font-size: 30px;
+  line-height: 35px;
+  text-align: center;
+  border-radius: 9px;
+  position: absolute;
+  top: 0px;
+  right: 30px;
+  cursor: pointer;
+  display: none;
+}
+
+.timerContainer:hover .deleteTimerBtn  {
+  display: block;
+}
+
 .footerContainer {
   bottom: 10px;
     right: 30px;
