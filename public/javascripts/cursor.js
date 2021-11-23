@@ -17,5 +17,18 @@ window.addEventListener("load", function() {
         cursorTimer = window.setTimeout(function () {
             document.body.style.cursor = "none";
         }, 5000)
+        screenTimer = window.setTimeout(function() {
+            $.ajax({
+                type: "POST",
+                url: ip + "/app/status",
+                data: JSON.stringify({ id: 5, options: { toggleOn: false } }),
+                success: function () {
+                    window.open("./app.html", "_self");
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }, 15*60*1000);
     });
 });

@@ -107,7 +107,7 @@ router.post('/status', function (req, res) {
       // Toggle screen
       case 5:
         if (process.platform == "linux") {
-          if (screenStatus) {
+          if (screenStatus && status.options.toggleOn!=true) {
             exec("tvservice -o", (error, stdout, stderr) => {
               // Check and handle error
               if (error) {
@@ -119,7 +119,7 @@ router.post('/status', function (req, res) {
               }
             });
           }
-          else {
+          else if(status.options.toggleOn!=false) {
             exec("tvservice -p; fbset -depth 8; fbset -depth 32; xrefresh", (error, stdout, stderr) => {
               // Check and handle error
               if (error) {
