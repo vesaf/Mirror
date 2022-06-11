@@ -82,12 +82,12 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-if (process.platform == "linux") {
-  exec("sudo python ./auxiliary/turn_on_screen.py", {
-    detached: true,
-    stdio: 'ignore'
-  });
-}
+// if (process.platform == "linux") {
+//   exec("sudo python ./auxiliary/turn_on_screen.py", {
+//     detached: true,
+//     stdio: 'ignore'
+//   });
+// }
 
 // throw Error
 
