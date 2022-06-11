@@ -83,7 +83,7 @@ function onListening() {
 }
 
 if (process.platform == "linux") {
-  exec("python ./auxiliary/turn_on_screen.py", {
+  exec("sudo python ./auxiliary/turn_on_screen.py", {
     detached: true,
     stdio: 'ignore'
   });
