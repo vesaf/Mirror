@@ -81,3 +81,14 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+if (process.platform == "linux") {
+  exec("python ./auxiliary/turn_on_screen.py", {
+    detached: true,
+    stdio: 'ignore'
+  });
+}
+
+// throw Error
+
+ 
