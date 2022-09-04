@@ -206,7 +206,7 @@ router.get('/nba', function (req, res) {
 
 // Send all nu.nl news headlines to the app
 router.get('/news', function (req, res) {
-  getRSSNews("http://feeds.nos.nl/nosnieuwsalgemeen", function(articlesNOS) {
+  getRSSNews("http://feeds.nos.nl/nosnieuws", function(articlesNOS) {
     // Setup news object
     var news = {
       "NOS": articlesNOS.slice(0, 10)
@@ -235,12 +235,18 @@ function getRSSNews(link, callback) {
 
     // if there are data (i.e. the requested page exists/there is an internet connection)
     if (!error) {
-      var articleJson = xmlParser.parse(body)["rss"]["channel"]["item"];
-      for (let i = 0; i < articleJson.length; i++) {
-        if (/ \| /.test(articleJson[i]["title"]) == false) {
-          articles.push(articleJson[i]["title"]);
+      try {
+        var articleJson = xmlParser.parse(body)["rss"]["channel"]["item"];
+        for (let i = 0; i < articleJson.length; i++) {
+          if (/ \| /.test(articleJson[i]["title"]) == false) {
+            articles.push(articleJson[i]["title"]);
+          }
         }
       }
+      catch(err) {
+        console.log(err)
+      }
+
     }
     else {
       console.error(error);
